@@ -1,7 +1,7 @@
 import Sidebar from "../components/Sidebar";
 import { useState } from "react";
 
-const DashboardPage = () => {
+const SignUpPage = () => {
   const [agreed, setAgreed] = useState(false);
 
   return (
@@ -113,4 +113,4 @@ const DashboardPage = () => {
     </>
   );
 };
-export default DashboardPage;
+export default SignUpPage;
