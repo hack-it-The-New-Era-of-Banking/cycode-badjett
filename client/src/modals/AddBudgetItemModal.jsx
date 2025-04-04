@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const AddBudgetItemModal = ({
@@ -12,6 +12,38 @@ const AddBudgetItemModal = ({
     itemName: "",
     itemPrice: "",
   });
+  const [categoryDetails, setCategoryDetails] = useState(null);
+  const [currentTotal, setCurrentTotal] = useState(0);
+  const [error, setError] = useState("");
+
+  // Fetch category details and current items total
+  useEffect(() => {
+    const fetchCategoryDetails = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_URL}/budget?id=${categoryId}`,
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
+          }
+        );
+
+        setCategoryDetails(response.data);
+
+        // Calculate current total spent
+        const total = response.data.categoryItems.reduce(
+          (sum, item) => sum + (item.itemPrice || 0),
+          0
+        );
+        setCurrentTotal(total);
+      } catch (error) {
+        console.error("Error fetching category details:", error);
+      }
+    };
+
+    fetchCategoryDetails();
+  }, [categoryId, token]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,10 +51,27 @@ const AddBudgetItemModal = ({
       ...prevData,
       [name]: value,
     }));
+
+    // Clear any previous error when user edits the price
+    if (name === "itemPrice") {
+      setError("");
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check if adding this item would exceed the budget
+    const newItemPrice = parseFloat(formData.itemPrice);
+    const budget = categoryDetails?.budget || 0;
+
+    if (currentTotal + newItemPrice > budget) {
+      setError(
+        `Adding this item will exceed your budget of ₱${budget.toLocaleString()}`
+      );
+      return;
+    }
+
     try {
       const response = await axios.post(
         `${
@@ -57,6 +106,35 @@ const AddBudgetItemModal = ({
         <h2 className="text-xl font-semibold mb-4 text-primary">
           Add Budget Item
         </h2>
+
+        {/* Budget Information */}
+        {categoryDetails && (
+          <div className="mb-4 text-sm">
+            <p className="font-medium">
+              Budget: ₱{categoryDetails.budget.toLocaleString()}
+            </p>
+            <p className="font-medium">
+              Spent so far: ₱{currentTotal.toLocaleString()} (
+              {categoryDetails.budget > 0
+                ? `${Math.round(
+                    (currentTotal / categoryDetails.budget) * 100
+                  )}%`
+                : "0%"}
+              )
+            </p>
+            <p className="font-medium">
+              Remaining: ₱
+              {(categoryDetails.budget - currentTotal).toLocaleString()}
+            </p>
+          </div>
+        )}
+
+        {error && (
+          <div className="mb-4 p-2 bg-red-100 text-red-700 rounded-md">
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
