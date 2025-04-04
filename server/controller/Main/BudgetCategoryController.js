@@ -213,23 +213,23 @@ const budgetCategoryItem_post = catchAsync(async (req, res, next) => {
 const budgetCategoryItem_delete = catchAsync(async (req, res, next) => {
   const { id } = req.query; // Get the item ID from the query
 
-  if (!itemId) {
+  if (!id) {
     return next(new AppError("Budget Category Item identifier not found", 400));
   }
 
   // Find the budget item
-  const budgetItem = await BudgetCategoryItems.findById(itemId);
+  const budgetItem = await BudgetCategoryItems.findById(id);
   if (!budgetItem) {
     return next(new AppError("Budget Category Item not found", 404));
   }
 
   // Remove the item from the BudgetCategory's categoryItems array
   await BudgetCategory.findByIdAndUpdate(budgetItem.categoryId, {
-    $pull: { categoryItems: itemId },
+    $pull: { categoryItems: id },
   });
 
   // Delete the budget item
-  const deletedBudgetItem = await BudgetCategoryItems.findByIdAndDelete(itemId);
+  const deletedBudgetItem = await BudgetCategoryItems.findByIdAndDelete(id);
 
   if (!deletedBudgetItem) {
     return next(new AppError("Failed to delete Budget Category Item", 404));
