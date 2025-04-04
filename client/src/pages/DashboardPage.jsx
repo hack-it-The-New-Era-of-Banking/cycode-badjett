@@ -36,7 +36,7 @@ const DashboardPage = (props) => {
           </div>
         </div>
         <div className="flex gap-4 ">
-          <div className="dashboard-summary h-32">
+          <div className="dashboard-summary h-32 justify-start align-start">
             <p className="title">Total Budget: $10k</p>
           </div>
           <div className="dashboard-summary h-32">

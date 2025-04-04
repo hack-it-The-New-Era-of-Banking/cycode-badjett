@@ -1,4 +1,3 @@
-import Sidebar from "../components/Sidebar";
 import { useState } from "react";
 
 const LoginPage = () => {
@@ -6,12 +5,13 @@ const LoginPage = () => {
 
   return (
     <>
-      <Sidebar />
       <div className="flex justify-center mt-8">
         <form className="w-full max-w-sm space-y-4 p-6 bg-gray-50 rounded-lg border-2 border-purple-800">
           {/* Heading inside form */}
           <div className="text-center mb-4">
-            <h1 className="text-3xl font-bold text-gray-800">Create your account</h1>
+            <h1 className="text-3xl font-bold text-gray-800">
+              Create your account
+            </h1>
             <p className="text-gray-600">Join BudgetApp now!</p>
           </div>
           {/* First Name */}
