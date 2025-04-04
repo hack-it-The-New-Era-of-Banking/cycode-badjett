@@ -150,7 +150,7 @@ const budgetCategory_delete = catchAsync(async (req, res, next) => {
   if (!budgetCategory)
     return next(new AppError("Budget Category not found", 404));
 
-  if (budgetCategory.userId !== req.userId) {
+  if (budgetCategory.userId.toString() !== req.userId) {
     return next(
       new AppError("You are not authorized to delete this budget category", 403)
     );
