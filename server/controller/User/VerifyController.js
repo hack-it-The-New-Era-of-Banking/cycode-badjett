@@ -1,8 +1,8 @@
 const User = require("../../models/User/User");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
-const AppError = require("../../Utilities/appError");
-const catchAsync = require("../../Utilities/catchAsync");
+const AppError = require("../../utilities/appError");
+const catchAsync = require("../../utilities/catchAsync");
 const jwt = require("jsonwebtoken");
 
 const createVerificationToken = (length) => {
