@@ -6,7 +6,8 @@ const DashboardPage = (props) => {
   const { user } = useUser();
   const currentUser = user.user;
 
-  console.log("Current User:", currentUser);
+  console.log(currentUser); // Log the current user object
+
   return (
     <>
       <div className="md:ml-64">

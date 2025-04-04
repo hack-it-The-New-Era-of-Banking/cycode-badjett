@@ -7,6 +7,7 @@ import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import BudgetPage from "./pages/BudgetPage";
+import BudgetItemPage from "./pages/BudgetItemPage";
 import ExpensesPage from "./pages/ExpensesPage";
 import IncomePage from "./pages/IncomePage";
 import InvestmentPage from "./pages/InvestmentPage";
@@ -34,6 +35,9 @@ function App() {
       <Routes>
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<LoginPage />} />
+
+     
+
         <Route
           path="/"
           element={
@@ -50,6 +54,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/budgetitem" element={<BudgetItemPage />} />
         <Route
           path="/expenses"
           element={
@@ -74,6 +79,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </UserProvider>
