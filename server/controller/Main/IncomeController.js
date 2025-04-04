@@ -59,7 +59,7 @@ const income_get = catchAsync(async (req, res, next) => {
 
   return res
     .status(200)
-    .json({ message: "Income Successfully Fetched", income, totalIncomeSum });
+    .json({ message: "Income Successfully Fetched", totalIncomeSum, income});
 });
 
 // Create Income

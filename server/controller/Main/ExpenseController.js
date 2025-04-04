@@ -17,7 +17,76 @@ const expense_get = catchAsync(async (req, res, next) => {
   if (!expense)
     return next(new AppError("Expense not found. Invalid Expense Identifier.", 404));
 
-  return res.status(200).json(expense);
+  let totalExpenseSum = 0;
+
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+
+  if (Array.isArray(expense)) {
+    expense = expense
+      .filter((item) => {
+        const expenseDate = new Date(item.date);
+        return (
+          expenseDate.getMonth() === currentMonth &&
+          expenseDate.getFullYear() === currentYear
+        );
+      })
+      .map((item) => {
+        const totalExpense = item.amount;
+        totalExpenseSum += totalExpense;
+        return {
+          ...item.toObject(),
+          totalExpense,
+        };
+      });
+  } else {
+    const expenseDate = new Date(expense.date);
+    if (
+      expenseDate.getMonth() === currentMonth &&
+      expenseDate.getFullYear() === currentYear
+    ) {
+      const totalExpense = expense.amount;
+      totalExpenseSum = totalExpense;
+      expense = {
+        ...expense.toObject(),
+        totalExpense,
+      };
+    } else {
+      expense = null;
+    }
+  }
+  
+  let total7ExpenseSum;
+
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+  if (Array.isArray(expense)) {
+    expense = expense
+      .filter((item) => {
+        const expenseDate = new Date(item.date);
+        return expenseDate >= sevenDaysAgo;
+      })
+      .map((item) => {
+        return {
+          ...item,
+        };
+      });
+
+    total7ExpenseSum = expense.reduce((sum, item) => sum + item.amount, 0);
+  } else {
+    const expenseDate = new Date(expense.date);
+    if (expenseDate >= sevenDaysAgo) {
+      total7ExpenseSum = expense.amount;
+      expense = {
+        ...expense,
+      };
+    } else {
+      expense = null;
+    }
+  }
+  
+  return res.status(200).json({ message: "Income Successfully Fetched", days7: total7ExpenseSum, month: totalExpenseSum, expense});
 });
 
 // Create Expense
