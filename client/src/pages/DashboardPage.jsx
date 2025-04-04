@@ -50,7 +50,8 @@ const DashboardPage = (props) => {
             },
           }
         );
-        setExpenses(response.data); // Update the expenses state with the fetched data
+        console.log(response.data); // Log the fetched budgets
+        setExpenses(response.data.expense); // Update the expenses state with the fetched data
         setTotalExpenses(response.data.month); // Update the total budget state
       } catch (error) {
         console.error("Error fetching budgets:", error);
@@ -59,6 +60,7 @@ const DashboardPage = (props) => {
     };
 
     fetchBudgets();
+    fetchExpenses();
   }, [currentUser._id, token]); // Run the effect when the user ID or token changes
 
   return (
@@ -160,25 +162,26 @@ const DashboardPage = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {expenses.map((expense) => (
-                  <tr key={expense._id}>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {expense.description}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {expense.merchant}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {new Date(expense.date).toLocaleDateString()}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      ₱{expense.amount.toLocaleString()}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      <button className="text-primary">Edit</button>
-                    </td>
-                  </tr>
-                ))}
+                {expenses &&
+                  expenses.map((expense) => (
+                    <tr key={expense._id}>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {expense.description}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {expense.merchant}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {new Date(expense.date).toLocaleDateString()}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        ₱{expense.amount.toLocaleString()}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        <button className="text-primary">Edit</button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
