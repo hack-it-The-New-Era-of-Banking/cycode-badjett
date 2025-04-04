@@ -63,28 +63,16 @@ const SignUpPage = () => {
               className="h-4 w-4 text-purple-600 border-gray-300 rounded"
             />
             <label htmlFor="terms" className="ml-2 flex flex-wrap">
-              <span className="text-slate-600 text-xs font-normal font-['Inter'] leading-tight">
-                By creating an account means you agree to the{" "}
+              <span className="text-slate-600 text-xs leading-tight mr-1">
+                By creating an account means you agree to the 
               </span>
-              <span className="text-slate-600 text-xs font-bold font-['Inter'] leading-tight">
-                Terms
+              <span className="text-slate-600 text-xs font-bold leading-tight">
+                Terms and Conditions
               </span>
-              <span className="text-slate-600 text-xs font-normal font-['Inter'] leading-tight">
-                {" "}
+              <span className="text-slate-600 text-xs leading-tight mr-1">
+                , and our
               </span>
-              <span className="text-slate-600 text-xs font-bold font-['Inter'] leading-tight">
-                and
-              </span>
-              <span className="text-slate-600 text-xs font-normal font-['Inter'] leading-tight">
-                {" "}
-              </span>
-              <span className="text-slate-600 text-xs font-bold font-['Inter'] leading-tight">
-                Conditions
-              </span>
-              <span className="text-slate-600 text-xs font-normal font-['Inter'] leading-tight">
-                , and our{" "}
-              </span>
-              <span className="text-slate-600 text-xs font-bold font-['Inter'] leading-tight">
+              <span className="text-slate-600 text-xs font-bold leading-tight">
                 Privacy Policy
               </span>
             </label>
