@@ -9,9 +9,7 @@ const AppError = require("../../utilities/appError");
 const user_login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne(
-    email
-  );
+  const user = await User.findOne({ email });
 
   if (!user) {
     return next(new AppError("User not found", 404));
