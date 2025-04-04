@@ -7,11 +7,9 @@ const AppError = require("../../utilities/appError");
 
 // Login route
 const user_login = catchAsync(async (req, res, next) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
-  const user = await User.findOne({
-    $or: [{ email: username }, { username }],
-  });
+  const user = await User.findOne({ email });
 
   if (!user) {
     return next(new AppError("User not found", 404));
@@ -41,7 +39,6 @@ const user_signup = catchAsync(async (req, res, next) => {
     firstName,
     lastName,
     email,
-    username,
     password,
   } = req.body;
 
@@ -50,12 +47,6 @@ const user_signup = catchAsync(async (req, res, next) => {
 
   if (userEmail) {
     return next(new AppError("Email already used.", 400));
-  }
-
-  const userName = await User.findOne({ username });
-
-  if (userName) {
-    return next(new AppError("Username already used.", 400));
   }
 
   // Hash the password before saving
@@ -67,7 +58,6 @@ const user_signup = catchAsync(async (req, res, next) => {
     firstName,
     lastName,
     email,
-    username,
     password: hashedPassword, // Save the hashed password
   });
 

@@ -1,13 +1,18 @@
+import { useUser } from "../context/UserContext";
 import ExpensesBarChart from "../components/dashboard/ExpensesBarChart";
 import BalanceLineChart from "../components/dashboard/BalanceLineChart";
 
 const DashboardPage = (props) => {
+  const { user } = useUser();
+  const currentUser = user.user;
+
+  console.log("Current User:", currentUser);
   return (
     <>
       <div className="md:ml-64">
         {/* dashboard greetings */}
         <div className="mb-4">
-          <h1 className="">Hi, CyCode</h1>
+          <h1 className="">Hi, {currentUser.firstName}</h1>
           <p>Here's what happening to your finances👋</p>
         </div>
         {/* dashboard AI insight */}

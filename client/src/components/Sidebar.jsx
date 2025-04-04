@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useNavigate, NavLink, Link } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 
 const Sidebar = (props) => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const { logout } = useUser();
 
   return (
     <>
@@ -90,15 +92,15 @@ const Sidebar = (props) => {
             </NavLink>
           </div>
         </div>
-        {/* <button
-          className="sidebar-option w-full bg-[#f4c5cc]"
+        <div
+          className="sidebar-option w-full bg-white mt-4"
           onClick={() => {
-            user.logout();
-            navigate("/register");
+            logout();
+            navigate("/login");
           }}
         >
           Logout
-        </button> */}
+        </div>
       </nav>
 
       {/* nav desktop */}
@@ -149,6 +151,15 @@ const Sidebar = (props) => {
               Expenses
             </NavLink>
           </div>
+        </div>
+        <div
+          className="sidebar-option w-full bg-white mt-4"
+          onClick={() => {
+            logout();
+            navigate("/login");
+          }}
+        >
+          Logout
         </div>
       </nav>
     </>

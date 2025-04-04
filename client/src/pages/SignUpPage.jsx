@@ -61,7 +61,6 @@ const SignUpPage = () => {
             </h1>
             <p className="text-gray-600">Join BudgetApp now!</p>
           </div>
-          {/* First Name */}
           <div className="relative">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               First Name
@@ -75,7 +74,6 @@ const SignUpPage = () => {
               className="w-full h-10 px-3 rounded-lg border-2 border-purple-800 outline-none focus:ring-2 focus:ring-purple-500"
             />
           </div>
-          {/* Last Name */}
           <div className="relative">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Last Name
@@ -89,7 +87,6 @@ const SignUpPage = () => {
               className="w-full h-10 px-3 rounded-lg border-2 border-purple-800 outline-none focus:ring-2 focus:ring-purple-500"
             />
           </div>
-          {/* Email */}
           <div className="relative">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Email
@@ -103,7 +100,6 @@ const SignUpPage = () => {
               className="w-full h-10 px-3 rounded-lg border-2 border-purple-800 outline-none focus:ring-2 focus:ring-purple-500"
             />
           </div>
-          {/* Password */}
           <div className="relative">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Password
@@ -117,7 +113,6 @@ const SignUpPage = () => {
               className="w-full h-10 px-3 rounded-lg border-2 border-purple-800 outline-none focus:ring-2 focus:ring-purple-500"
             />
           </div>
-          {/* Terms Agreement */}
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -128,33 +123,20 @@ const SignUpPage = () => {
               className="h-4 w-4 text-purple-600 border-gray-300 rounded"
             />
             <label htmlFor="terms" className="ml-2 flex flex-wrap">
-              <span className="text-slate-600 text-xs font-normal font-['Inter'] leading-tight">
-                By creating an account means you agree to the{" "}
+              <span className="text-slate-600 text-xs leading-tight mr-1">
+                By creating an account means you agree to the
               </span>
-              <span className="text-slate-600 text-xs font-bold font-['Inter'] leading-tight">
-                Terms
+              <span className="text-slate-600 text-xs font-bold leading-tight">
+                Terms and Conditions
               </span>
-              <span className="text-slate-600 text-xs font-normal font-['Inter'] leading-tight">
-                {" "}
+              <span className="text-slate-600 text-xs leading-tight mr-1">
+                , and our
               </span>
-              <span className="text-slate-600 text-xs font-bold font-['Inter'] leading-tight">
-                and
-              </span>
-              <span className="text-slate-600 text-xs font-normal font-['Inter'] leading-tight">
-                {" "}
-              </span>
-              <span className="text-slate-600 text-xs font-bold font-['Inter'] leading-tight">
-                Conditions
-              </span>
-              <span className="text-slate-600 text-xs font-normal font-['Inter'] leading-tight">
-                , and our{" "}
-              </span>
-              <span className="text-slate-600 text-xs font-bold font-['Inter'] leading-tight">
+              <span className="text-slate-600 text-xs font-bold leading-tight">
                 Privacy Policy
               </span>
             </label>
           </div>
-          {/* Submit Button */}
           <button
             type="submit"
             className="w-full py-2 px-4 bg-purple-800 text-white font-semibold rounded-lg hover:bg-purple-700 transition"
