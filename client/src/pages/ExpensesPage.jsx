@@ -205,7 +205,6 @@ const ExpensesPage = () => {
                 onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })}
               />
             </div>
-
             {/* Buttons */}
             <div className="flex justify-end gap-4 mt-4">
               <button
