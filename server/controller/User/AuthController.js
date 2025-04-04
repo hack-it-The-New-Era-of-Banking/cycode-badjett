@@ -2,7 +2,7 @@ const User = require("../../models/User/User");
 const InvalidToken = require("../../models/InvalidToken");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const catchAsync = require("../../Utilities/catchAsync");
+const catchAsync = require("../../utilities/catchAsync");
 const AppError = require("../../utilities/appError");
 
 // Login route
