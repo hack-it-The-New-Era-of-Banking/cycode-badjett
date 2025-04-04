@@ -32,7 +32,7 @@ const Sidebar = (props) => {
       )}
 
       <nav
-        className={`z-20 fixed flex flex-col justify-between right-0 min-w-[75%] h-screen bg-secondary p-4 shadow-2xl backdrop-blur-lg ${
+        className={`z-20 fixed flex flex-col justify-between right-0 top-0 min-w-[75%] h-screen bg-secondary p-4 shadow-2xl backdrop-blur-lg ${
           !isOpen && "translate-x-full"
         } transition-all duration-200 md:hidden`}
       >
@@ -99,6 +99,57 @@ const Sidebar = (props) => {
         >
           Logout
         </button> */}
+      </nav>
+
+      {/* nav desktop */}
+      <nav
+        className={`hidden  z-20 fixed  flex-col justify-between left-0 top-0 min-w-60 h-screen bg-secondary p-4 shadow-2xl backdrop-blur-lg md:block md:flex`}
+      >
+        <div className="">
+          <h2 className="pl-2 mb-4 text-xl font-bold">Budget App</h2>
+          <div>
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `sidebar-option ${isActive ? "sidebar-option-active" : ""}`
+              }
+            >
+              Dashboard
+            </NavLink>
+            <NavLink
+              to="/income"
+              className={({ isActive }) =>
+                `sidebar-option ${isActive ? "sidebar-option-active" : ""}`
+              }
+            >
+              Incomes
+            </NavLink>
+            <NavLink
+              to="/budget"
+              className={({ isActive }) =>
+                `sidebar-option ${isActive ? "sidebar-option-active" : ""}`
+              }
+            >
+              Budgets
+            </NavLink>
+            <NavLink
+              to="/investment"
+              className={({ isActive }) =>
+                `sidebar-option  ${isActive ? "sidebar-option-active" : ""}`
+              }
+            >
+              Investments
+            </NavLink>
+            <NavLink
+              to="/expenses"
+              className={({ isActive }) =>
+                `sidebar-option ${isActive ? "sidebar-option-active" : ""}`
+              }
+            >
+              Expenses
+            </NavLink>
+          </div>
+        </div>
       </nav>
     </>
   );

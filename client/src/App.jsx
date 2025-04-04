@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFoundPage";
 
 //components
 import Sidebar from "./components/Sidebar";
+import Header from "./components/Header";
 
 function App() {
   // const user = useUser();
@@ -18,6 +19,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
+        <Header />
         <Sidebar />
         <Routes>
           <Route path="/" element={<DashboardPage />} />
