@@ -4,11 +4,23 @@
   .sidebar-option {
     @apply block p-2 font-semibold mb-4;
   }
+
+  .sidebar-option-active {
+    @apply bg-primary text-white rounded-lg;
+  }
+
+  .dashboard-summary {
+    @apply flex flex-1 items-center justify-between rounded-lg  p-4 border-2 border-primary;
+  }
+
+  .title {
+    @apply font-semibold text-center md:text-left;
+  }
 }
 
 @layer base {
   h1 {
-    @apply text-xl font-bold mb-4;
+    @apply text-xl font-bold;
   }
 
   h2,
@@ -17,6 +29,10 @@
   h5,
   h6 {
     @apply font-semibold;
+  }
+
+  body {
+    @apply p-4;
   }
 }
 

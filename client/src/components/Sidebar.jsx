@@ -3,34 +3,36 @@ import { useNavigate, NavLink, Link } from "react-router-dom";
 
 const Sidebar = (props) => {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
       {!isOpen && (
-        // <div className="">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="absolute h-8 w-8 top-4 right-4 md:hidden"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+        <div
+          className="cursor-pointer "
           onClick={() => {
             setIsOpen(true);
           }}
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
-        // </div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="absolute h-8 w-8 top-4 right-4 md:hidden"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </div>
       )}
 
       <nav
-        className={`z-20 fixed flex flex-col justify-between right-0 min-w-[75%] h-screen bg-secondary p-4 shadow-2xl backdrop-blur-lg ${
+        className={`z-20 fixed flex flex-col justify-between right-0 top-0 min-w-[75%] h-screen bg-secondary p-4 shadow-2xl backdrop-blur-lg ${
           !isOpen && "translate-x-full"
         } transition-all duration-200 md:hidden`}
       >
@@ -43,7 +45,7 @@ const Sidebar = (props) => {
           &times;
         </div>
 
-        <div className="relative">
+        <div className="">
           <h2 className="pl-2 mb-4 text-xl font-bold">Budget App</h2>
           <div>
             <NavLink
@@ -55,36 +57,36 @@ const Sidebar = (props) => {
               Dashboard
             </NavLink>
             <NavLink
-              to="/"
+              to="/income"
               className={({ isActive }) =>
                 `sidebar-option ${isActive ? "sidebar-option-active" : ""}`
               }
             >
-              Dashboard
+              Incomes
             </NavLink>
             <NavLink
-              to="/"
+              to="/budget"
               className={({ isActive }) =>
                 `sidebar-option ${isActive ? "sidebar-option-active" : ""}`
               }
             >
-              Dashboard
+              Budgets
             </NavLink>
             <NavLink
-              to="/"
+              to="/investment"
               className={({ isActive }) =>
                 `sidebar-option  ${isActive ? "sidebar-option-active" : ""}`
               }
             >
-              Dashboard
+              Investments
             </NavLink>
             <NavLink
-              to="/"
+              to="/expenses"
               className={({ isActive }) =>
                 `sidebar-option ${isActive ? "sidebar-option-active" : ""}`
               }
             >
-              Dashboard
+              Expenses
             </NavLink>
           </div>
         </div>
@@ -97,6 +99,57 @@ const Sidebar = (props) => {
         >
           Logout
         </button> */}
+      </nav>
+
+      {/* nav desktop */}
+      <nav
+        className={`hidden  z-20 fixed  flex-col justify-between left-0 top-0 min-w-60 h-screen bg-secondary p-4 shadow-2xl backdrop-blur-lg md:block md:flex`}
+      >
+        <div className="">
+          <h2 className="pl-2 mb-4 text-xl font-bold">Budget App</h2>
+          <div>
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `sidebar-option ${isActive ? "sidebar-option-active" : ""}`
+              }
+            >
+              Dashboard
+            </NavLink>
+            <NavLink
+              to="/income"
+              className={({ isActive }) =>
+                `sidebar-option ${isActive ? "sidebar-option-active" : ""}`
+              }
+            >
+              Incomes
+            </NavLink>
+            <NavLink
+              to="/budget"
+              className={({ isActive }) =>
+                `sidebar-option ${isActive ? "sidebar-option-active" : ""}`
+              }
+            >
+              Budgets
+            </NavLink>
+            <NavLink
+              to="/investment"
+              className={({ isActive }) =>
+                `sidebar-option  ${isActive ? "sidebar-option-active" : ""}`
+              }
+            >
+              Investments
+            </NavLink>
+            <NavLink
+              to="/expenses"
+              className={({ isActive }) =>
+                `sidebar-option ${isActive ? "sidebar-option-active" : ""}`
+              }
+            >
+              Expenses
+            </NavLink>
+          </div>
+        </div>
       </nav>
     </>
   );
