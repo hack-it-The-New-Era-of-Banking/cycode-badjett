@@ -15,7 +15,6 @@ const BudgetPage = () => {
   const openModal = () => setIsModalOpen(true); // Function to open the modal
   const closeModal = () => setIsModalOpen(false); // Function to close the modal
 
-  // Fetch budgets from the API
   useEffect(() => {
     const fetchBudgets = async () => {
       try {
@@ -35,19 +34,51 @@ const BudgetPage = () => {
     };
 
     fetchBudgets();
-  }, []); // Run the effect when the token changes
+  }, [currentUser._id, token]); // Run the effect when the token or user ID changes
+
+  // Handle delete budget
+  const handleDelete = async (budgetId) => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_URL}/budget/${budgetId}?userId=${
+          currentUser._id
+        }`,
+        {
+          headers: {
+            Authorization: `${token}`, // Add the token to the Authorization header
+          },
+        }
+      );
+      alert("Budget deleted successfully!");
+      // Refresh the budgets list after deletion
+      setBudgets((prevBudgets) =>
+        prevBudgets.filter((budget) => budget._id !== budgetId)
+      );
+    } catch (error) {
+      console.error("Error deleting budget:", error);
+      alert("Failed to delete budget. Please try again.");
+    }
+  };
 
   return (
     <div className="md:ml-64 min-h-screen pb-32">
-      <h1 className=" text-black break-words mb-4">My Budgets</h1>
+      <h1 className="text-black break-words mb-4">My Budget</h1>
       {/* Budget List - Responsive */}
       <div className="flex flex-wrap gap-4 justify-between">
-        {budgets.map((budget, index) => (
+        {budgets.map((budget) => (
           <div
             key={budget._id} // Use budget ID as the key
-            onClick={() => navigate(`/budget/${budget._id}`)} // Navigate to the budget page
-            className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 flex-grow h-auto border-2 border-[#6147AA] rounded-xl p-4 shadow-sm flex items-center cursor-pointer"
+            onClick={() => navigate(`/budget/${budget._id}`)} // Navigate to the budget item page on click
+            className="relative w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 flex-grow h-auto border-2 border-[#6147AA] rounded-xl p-4 shadow-sm flex items-center"
           >
+            {/* Close Icon */}
+            <button
+              onClick={() => handleDelete(budget._id)} // Call handleDelete with the budget ID
+              className="absolute top-0 right-2 text-primary hover:text-primary text-xl font-bold"
+              aria-label="Delete Budget"
+            >
+              &times;
+            </button>
             <div className="w-[50px] h-[50px] bg-[#D9D9D9] border-2 border-[#6147AA] rounded-full flex items-center justify-center mr-[15px]">
               <span role="img" aria-label="icon">
                 📊
@@ -59,8 +90,8 @@ const BudgetPage = () => {
                 <span>{budget.category}</span>
                 <span className="text-right">₱{budget.budget}</span>
               </h3>
-              <p className="text-[16px] text-[#6147AA] font-normal break-words ">
-                ₱{budget.budget} Remaining
+              <p className="text-[16px] text-[#6147AA] font-normal break-words">
+                {budget.budget} Remaining
               </p>
             </div>
           </div>
