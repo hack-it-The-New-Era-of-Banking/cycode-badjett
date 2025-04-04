@@ -8,7 +8,7 @@
 
 @layer base {
   h1 {
-    @apply font-xl font-bold mb-4;
+    @apply text-xl font-bold mb-4;
   }
 
   h2,

@@ -3,30 +3,32 @@ import { useNavigate, NavLink, Link } from "react-router-dom";
 
 const Sidebar = (props) => {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
       {!isOpen && (
-        // <div className="">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="absolute h-8 w-8 top-4 right-4 md:hidden"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+        <div
+          className="cursor-pointer "
           onClick={() => {
             setIsOpen(true);
           }}
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
-        // </div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="absolute h-8 w-8 top-4 right-4 md:hidden"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </div>
       )}
 
       <nav
@@ -43,7 +45,7 @@ const Sidebar = (props) => {
           &times;
         </div>
 
-        <div className="relative">
+        <div className="">
           <h2 className="pl-2 mb-4 text-xl font-bold">Budget App</h2>
           <div>
             <NavLink
@@ -55,36 +57,36 @@ const Sidebar = (props) => {
               Dashboard
             </NavLink>
             <NavLink
-              to="/"
+              to="/income"
               className={({ isActive }) =>
                 `sidebar-option ${isActive ? "sidebar-option-active" : ""}`
               }
             >
-              Dashboard
+              Incomes
             </NavLink>
             <NavLink
-              to="/"
+              to="/budget"
               className={({ isActive }) =>
                 `sidebar-option ${isActive ? "sidebar-option-active" : ""}`
               }
             >
-              Dashboard
+              Budgets
             </NavLink>
             <NavLink
-              to="/"
+              to="/investment"
               className={({ isActive }) =>
                 `sidebar-option  ${isActive ? "sidebar-option-active" : ""}`
               }
             >
-              Dashboard
+              Investments
             </NavLink>
             <NavLink
-              to="/"
+              to="/expenses"
               className={({ isActive }) =>
                 `sidebar-option ${isActive ? "sidebar-option-active" : ""}`
               }
             >
-              Dashboard
+              Expenses
             </NavLink>
           </div>
         </div>
