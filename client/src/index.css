@@ -6,6 +6,20 @@
   }
 }
 
+@layer base {
+  h1 {
+    @apply font-xl font-bold mb-4;
+  }
+
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-semibold;
+  }
+}
+
 @theme {
   --color-primary: #6147aa;
   --color-secondary: #d9c5e8;
