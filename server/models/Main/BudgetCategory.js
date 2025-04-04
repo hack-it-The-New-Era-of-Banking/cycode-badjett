@@ -7,12 +7,15 @@ const budgetCategorySchema = new mongoose.Schema(
       type: String,
     },
     budget: {
-      type: Number
+      type: Number,
     },
     description: {
       type: String,
     },
     totalSpent: [{ type: mongoose.Schema.Types.ObjectId, ref: "Expenses" }], // sa controller automatically sum all of it up
+    categoryItems: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "BudgetCategoryItems" },
+    ],
   },
   {
     timestamps: true,
