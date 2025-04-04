@@ -1,4 +1,4 @@
-const AppError = require("../Utilities/appError");
+const AppError = require("../utilities/appError");
 
 const handleCastErrorDB = (err) => {
   // handling cast error in MongoDB
