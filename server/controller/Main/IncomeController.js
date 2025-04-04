@@ -18,7 +18,48 @@ const income_get = catchAsync(async (req, res, next) => {
   if (!income)
     return next(new AppError("Income not found. Invalid Income Identifier.", 404));
 
-  return res.status(200).json(income);
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+
+  let totalIncomeSum = 0;
+
+  if (Array.isArray(income)) {
+    income = income
+      .filter((item) => {
+        const incomeDate = new Date(item.dateReceived);
+        return (
+          incomeDate.getMonth() === currentMonth &&
+          incomeDate.getFullYear() === currentYear
+        );
+      })
+      .map((item) => {
+        const totalIncome = item.earnedIncome + item.additionalCompensation;
+        totalIncomeSum += totalIncome;
+        return {
+          ...item.toObject(),
+          totalIncome,
+        };
+      });
+  } else {
+    const incomeDate = new Date(income.dateReceived);
+    if (
+      incomeDate.getMonth() === currentMonth &&
+      incomeDate.getFullYear() === currentYear
+    ) {
+      const totalIncome = income.earnedIncome + income.additionalCompensation;
+      totalIncomeSum = totalIncome;
+      income = {
+        ...income.toObject(),
+        totalIncome,
+      };
+    } else {
+      income = null;
+    }
+  }
+
+  return res
+    .status(200)
+    .json({ message: "Income Successfully Fetched", income, totalIncomeSum });
 });
 
 // Create Income
@@ -111,7 +152,6 @@ const income_delete = catchAsync(async (req, res, next) => {
   if (!income) return next(new AppError("Income not found", 404));
 
   if(income.userId.toString() !== req.userId) {
-    console.log(income.userId, req.userId);
     return next(new AppError("You are not authorized to delete this budget category", 403));
   }
 
