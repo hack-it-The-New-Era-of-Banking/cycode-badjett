@@ -12,6 +12,9 @@ const userRoute = require("./routes/User/userRoute");
 
 // main functionalities
 const budgetCategoryRoute = require("./routes/Main/budgetCategoryRoute");
+const incomeRoute = require("./routes/Main/incomeRoute");
+const expenseRoute = require("./routes/Main/expenseRoute");
+
 
 // utility
 const aliveRoute = require("./routes/aliveRoute");
@@ -54,6 +57,9 @@ app.use("/api/user", checkAuth, userRoute);
 
 // main functionalities
 app.use("/api/budget", checkAuth, budgetCategoryRoute);
+app.use("/api/income", checkAuth, incomeRoute);
+app.use("/api/expense", checkAuth, expenseRoute);
+
 
 
 // utility

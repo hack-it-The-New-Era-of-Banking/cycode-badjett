@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
 
-const budgetInfoSchema = new mongoose.Schema(
+const budgetCategorySchema = new mongoose.Schema(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     category: {
       type: String,
     },
     budget: {
-      type: mongoose.Types.Decimal128,
+      type: Number
     },
     description: {
       type: String,
@@ -19,4 +19,4 @@ const budgetInfoSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("BudgetInfo", budgetInfoSchema);
+module.exports = mongoose.model("BudgetCategory", budgetCategorySchema);

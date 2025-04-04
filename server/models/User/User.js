@@ -25,6 +25,7 @@ const userSchema = new mongoose.Schema(
     token: String,
     budgetCategory: [{ type: mongoose.Schema.Types.ObjectId, ref: "BudgetCategory" }],
     income: [{ type: mongoose.Schema.Types.ObjectId, ref: "Income" }],
+    expense: [{ type: mongoose.Schema.Types.ObjectId, ref: "Expenses" }],
 
     // connect budget info
     // connect expenses
