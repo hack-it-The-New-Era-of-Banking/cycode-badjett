@@ -121,7 +121,7 @@ const expense_delete = catchAsync(async (req, res, next) => {
   const expense = await Expense.findById(id);
   if (!expense) return next(new AppError("Expense not found", 404));
 
-  if(expense.userId !== req.userId) {
+  if(expense.userId.toString() !== req.userId) {
     return next(new AppError("You are not authorized to delete this budget category", 403));
   }
 

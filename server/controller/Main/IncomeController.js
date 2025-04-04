@@ -12,28 +12,8 @@ const income_get = catchAsync(async (req, res, next) => {
   if (!id && !userId) return next(new AppError("Income identifier not found", 400));
 
   id ? income = await Income.findById(id)
-  .populate("totalSpent")
-  .populate("userId") : await Income.find({userId: userId})
-  .populate("totalSpent")
+  .populate("userId") : income = await Income.find({userId: userId})
   .populate("userId");
-
-  if (Array.isArray(income)) {
-    income = income.map((category) => {
-      const totalSpentPerMonth = category.totalSpent.reduce((acc, curr) => {
-        const month = new Date(curr.date).getMonth();
-        acc[month] = (acc[month] || 0) + curr.moneySpent;
-        return acc;
-      }, {});
-      return { ...category.toObject(), totalSpentPerMonth };
-    });
-  } else {
-    const totalSpentPerMonth = income.totalSpent.reduce((acc, curr) => {
-      const month = new Date(curr.date).getMonth();
-      acc[month] = (acc[month] || 0) + curr.moneySpent;
-      return acc;
-    }, {});
-    income = { ...income.toObject(), totalSpentPerMonth };
-  }
 
   if (!income)
     return next(new AppError("Income not found. Invalid Income Identifier.", 404));
@@ -61,7 +41,7 @@ const income_post = catchAsync(async (req, res, next) => {
   }
   
   const newIncome = new Income({
-    userId, category, budget, description
+    userId, jobTitle, earnedIncome, additionalCompensation, category, dateReceived
   });
 
   await User.findByIdAndUpdate(
@@ -130,7 +110,8 @@ const income_delete = catchAsync(async (req, res, next) => {
   const income = await Income.findById(id);
   if (!income) return next(new AppError("Income not found", 404));
 
-  if(income.userId !== req.userId) {
+  if(income.userId.toString() !== req.userId) {
+    console.log(income.userId, req.userId);
     return next(new AppError("You are not authorized to delete this budget category", 403));
   }
 
