@@ -1,25 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import PlusSign from "../assets/icons/PlusSign.svg"; // Import the SVG icon
 import AddBudgetModalCategory from "../modals/AddBudgetCategory";
+import { useUser } from "../context/UserContext"; // Import the user context
 
 const BudgetPage = () => {
+  const { token, user } = useUser(); // Get the token from the user context
+  const currentUser = user.user;
+  const [budgets, setBudgets] = useState([]); // State to store fetched budgets
   const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
 
   const openModal = () => setIsModalOpen(true); // Function to open the modal
   const closeModal = () => setIsModalOpen(false); // Function to close the modal
 
-  const budgets = [
-    { category: "Groceries", amount: 1000 },
-    { category: "Transportation", amount: 800 },
-    { category: "Pets", amount: 1000 },
-    { category: "Utilities", amount: 1200 },
-    { category: "Dining", amount: 900 },
-    { category: "Savings", amount: 2000 },
-  ];
+  // Fetch budgets from the API
+  useEffect(() => {
+    const fetchBudgets = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_URL}/budget?userId=${currentUser._id}`,
+          {
+            headers: {
+              Authorization: `${token}`, // Add the token to the Authorization header
+            },
+          }
+        );
+        console.log(response.data); // Log the fetched budgets
+        setBudgets(response.data); // Update the budgets state with the fetched data
+      } catch (error) {
+        console.error("Error fetching budgets:", error);
+      }
+    };
+
+    fetchBudgets();
+  }, []); // Run the effect when the token changes
 
   return (
     <div className="md:ml-64 min-h-screen pb-32">
-      <h1 className=" font-semibold text-black break-words mb-4">My Budgets</h1>
+      <h1 className="font-semibold text-black break-words mb-4">My Budgets</h1>
       {/* Budget List - Responsive */}
       <div className="flex flex-wrap gap-4 justify-between">
         {/* Existing Budgets */}
@@ -39,10 +57,10 @@ const BudgetPage = () => {
             <div className="flex-grow">
               <h3 className="text-[20px] font-semibold text-black break-words flex justify-between">
                 <span>{budget.category}</span>
-                <span className="text-right">₱{budget.amount}</span>
+                <span className="text-right">₱{budget.budget}</span>
               </h3>
               <p className="text-[16px] text-[#6147AA] font-normal break-words ">
-                ₱{budget.amount} Remaining
+                ₱{budget.budget} Remaining
               </p>
             </div>
           </div>

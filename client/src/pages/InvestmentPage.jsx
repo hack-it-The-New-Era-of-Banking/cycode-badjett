@@ -1,6 +1,6 @@
 import React from "react";
 
-const InvestmentPage = (props) => {
+const InvestmentPage = () => {
   return (
     <div className="">
       <h1 className="">Investment Page</h1>
