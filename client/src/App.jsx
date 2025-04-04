@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 
 //pages
 import SignUpPage from "./pages/SignUpPage";
+import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import BudgetPage from "./pages/BudgetPage";
 import ExpensesPage from "./pages/ExpensesPage";
@@ -22,17 +23,22 @@ function App() {
 
   return (
     <>
+
+ 
+
       {!isAuthRoute && <Header />}
       {!isAuthRoute && <Sidebar />}
       <Routes>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/budget" element={<BudgetPage />} />
         <Route path="/expenses" element={<ExpensesPage />} />
         <Route path="/income" element={<IncomePage />} />
         <Route path="/investment" element={<InvestmentPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+
     </>
   );
 }

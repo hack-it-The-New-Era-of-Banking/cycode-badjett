@@ -1,18 +1,17 @@
 import Sidebar from "../components/Sidebar";
 import { useState } from "react";
 
-const SignUpPage = () => {
+const LoginPage = () => {
   const [agreed, setAgreed] = useState(false);
 
   return (
     <>
+      <Sidebar />
       <div className="flex justify-center mt-8">
         <form className="w-full max-w-sm space-y-4 p-6 bg-gray-50 rounded-lg border-2 border-purple-800">
           {/* Heading inside form */}
           <div className="text-center mb-4">
-            <h1 className="text-3xl font-bold text-gray-800">
-              Create your account
-            </h1>
+            <h1 className="text-3xl font-bold text-gray-800">Create your account</h1>
             <p className="text-gray-600">Join BudgetApp now!</p>
           </div>
           {/* First Name */}
@@ -100,18 +99,12 @@ const SignUpPage = () => {
             type="submit"
             className="w-full py-2 px-4 bg-purple-800 text-white font-semibold rounded-lg hover:bg-purple-700 transition"
           >
-            Sign Up
+            Sign
           </button>
-          {/* Already have an account */}
-          <div className="flex justify-center mt-4">
-            <p className="text-gray-600">Already have an account?</p>
-            <a href="/login" className="text-purple-800 font-semibold ml-1">
-              Log In
-            </a>
-          </div>
         </form>
       </div>
     </>
   );
 };
-export default SignUpPage;
+
+export default LoginPage;
