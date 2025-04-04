@@ -10,20 +10,107 @@ const expense_get = catchAsync(async (req, res, next) => {
 
   let expense;
 
-  if (!id && !userId) return next(new AppError("Expense identifier not found", 400));
+  if (!id && !userId)
+    return next(new AppError("Expense identifier not found", 400));
 
-  id ? expense = await Expense.findById(id).populate("category") : expense = await Expense.find({userId: userId}).populate("category");
+  id
+    ? (expense = await Expense.findById(id).populate("category"))
+    : (expense = await Expense.find({ userId: userId }).populate("category"));
 
   if (!expense)
-    return next(new AppError("Expense not found. Invalid Expense Identifier.", 404));
+    return next(
+      new AppError("Expense not found. Invalid Expense Identifier.", 404)
+    );
 
-  return res.status(200).json(expense);
+  let totalExpenseSum = 0;
+
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+
+  if (Array.isArray(expense)) {
+    expense = expense
+      .filter((item) => {
+        const expenseDate = new Date(item.date);
+        return (
+          expenseDate.getMonth() === currentMonth &&
+          expenseDate.getFullYear() === currentYear
+        );
+      })
+      .map((item) => {
+        const totalExpense = item.amount;
+        totalExpenseSum += totalExpense;
+        return {
+          ...item.toObject(),
+          totalExpense,
+        };
+      });
+  } else {
+    const expenseDate = new Date(expense.date);
+    if (
+      expenseDate.getMonth() === currentMonth &&
+      expenseDate.getFullYear() === currentYear
+    ) {
+      const totalExpense = expense.amount;
+      totalExpenseSum = totalExpense;
+      expense = {
+        ...expense.toObject(),
+        totalExpense,
+      };
+    } else {
+      expense = null;
+    }
+  }
+
+  let total7ExpenseSum;
+
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+  if (Array.isArray(expense)) {
+    expense = expense
+      .filter((item) => {
+        const expenseDate = new Date(item.date);
+        return expenseDate >= sevenDaysAgo;
+      })
+      .map((item) => {
+        return {
+          ...item,
+        };
+      });
+
+    total7ExpenseSum = expense.reduce((sum, item) => sum + item.amount, 0);
+  } else {
+    const expenseDate = new Date(expense.date);
+    if (expenseDate >= sevenDaysAgo) {
+      total7ExpenseSum = expense.amount;
+      expense = {
+        ...expense,
+      };
+    } else {
+      expense = null;
+    }
+  }
+
+  return res.status(200).json({
+    message: "Income Successfully Fetched",
+    days7: total7ExpenseSum,
+    month: totalExpenseSum,
+    expense,
+  });
 });
 
 // Create Expense
 const expense_post = catchAsync(async (req, res, next) => {
   const { userId } = req.query;
-  const { category, amount, description, paymentMethod, date, is_recurring } = req.body;
+  const {
+    category,
+    merchant,
+    amount,
+    description,
+    paymentMethod,
+    date,
+    is_recurring,
+  } = req.body;
 
   const isUserValid = await User.findById(userId);
 
@@ -32,17 +119,25 @@ const expense_post = catchAsync(async (req, res, next) => {
 
   if (
     !amount &&
+    !merchant &&
     !description &&
     !paymentMethod &&
-    !category && 
-    !date && 
+    !category &&
+    !date &&
     !is_recurring
   ) {
     return next(new AppError("Cannot create expense, no data.", 400));
   }
-  
+
   const newExpense = new Expense({
-    userId, category, amount, description, paymentMethod, date, is_recurring
+    userId,
+    category,
+    merchant,
+    amount,
+    description,
+    paymentMethod,
+    date,
+    is_recurring,
   });
 
   await User.findByIdAndUpdate(
@@ -67,17 +162,25 @@ const expense_post = catchAsync(async (req, res, next) => {
 // Update Expense
 const expense_put = catchAsync(async (req, res, next) => {
   const { id } = req.query;
-  const { category, amount, description, paymentMethod, date, is_recurring } =
-    req.body;
+  const {
+    category,
+    merchant,
+    amount,
+    description,
+    paymentMethod,
+    date,
+    is_recurring,
+  } = req.body;
 
   if (!id) return next(new AppError("Expense identifier not found", 400));
 
   if (
     !amount &&
+    !merchant &&
     !description &&
     !paymentMethod &&
-    !category && 
-    !date && 
+    !category &&
+    !date &&
     !is_recurring
   ) {
     return next(new AppError("No data to update", 400));
@@ -92,12 +195,12 @@ const expense_put = catchAsync(async (req, res, next) => {
   let updates = {};
 
   if (amount) updates.amount = amount;
+  if (merchant) updates.merchant = merchant;
   if (description) updates.description = description;
   if (paymentMethod) updates.paymentMethod = paymentMethod;
   if (category) updates.category = category;
   if (date) updates.date = date;
   if (is_recurring) updates.is_recurring = is_recurring;
-
 
   const updatedExpense = await Expense.findByIdAndUpdate(id, updates, {
     new: true,
@@ -121,8 +224,10 @@ const expense_delete = catchAsync(async (req, res, next) => {
   const expense = await Expense.findById(id);
   if (!expense) return next(new AppError("Expense not found", 404));
 
-  if(expense.userId.toString() !== req.userId) {
-    return next(new AppError("You are not authorized to delete this budget category", 403));
+  if (expense.userId.toString() !== req.userId) {
+    return next(
+      new AppError("You are not authorized to delete this budget category", 403)
+    );
   }
 
   const deletedExpense = await Expense.findByIdAndDelete(id);

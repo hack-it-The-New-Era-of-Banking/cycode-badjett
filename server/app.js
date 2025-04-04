@@ -14,6 +14,8 @@ const userRoute = require("./routes/User/userRoute");
 const budgetCategoryRoute = require("./routes/Main/budgetCategoryRoute");
 const incomeRoute = require("./routes/Main/incomeRoute");
 const expenseRoute = require("./routes/Main/expenseRoute");
+const chatBot = require("./routes/Main/chatBotRoute");
+
 
 
 // utility
@@ -59,6 +61,8 @@ app.use("/api/user", checkAuth, userRoute);
 app.use("/api/budget", checkAuth, budgetCategoryRoute);
 app.use("/api/income", checkAuth, incomeRoute);
 app.use("/api/expense", checkAuth, expenseRoute);
+app.use("/api/chat", checkAuth, chatBot);
+
 
 
 
