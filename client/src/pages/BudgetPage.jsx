@@ -18,10 +18,8 @@ const BudgetPage = () => {
   ];
 
   return (
-    <div className="md:ml-64 p-6 min-h-screen pb-32">
-      <h1 className="text-[35px] font-semibold text-black break-words mb-4">
-        My Budgets
-      </h1>
+    <div className="md:ml-64 min-h-screen pb-32">
+      <h1 className=" font-semibold text-black break-words mb-4">My Budgets</h1>
       {/* Budget List - Responsive */}
       <div className="flex flex-wrap gap-4 justify-between">
         {/* Existing Budgets */}
