@@ -209,10 +209,43 @@ const budgetCategoryItem_post = catchAsync(async (req, res, next) => {
   });
 });
 
+// Delete Budget Category Item
+const budgetCategoryItem_delete = catchAsync(async (req, res, next) => {
+  const { id } = req.query; // Get the item ID from the query
+
+  if (!itemId) {
+    return next(new AppError("Budget Category Item identifier not found", 400));
+  }
+
+  // Find the budget item
+  const budgetItem = await BudgetCategoryItems.findById(itemId);
+  if (!budgetItem) {
+    return next(new AppError("Budget Category Item not found", 404));
+  }
+
+  // Remove the item from the BudgetCategory's categoryItems array
+  await BudgetCategory.findByIdAndUpdate(budgetItem.categoryId, {
+    $pull: { categoryItems: itemId },
+  });
+
+  // Delete the budget item
+  const deletedBudgetItem = await BudgetCategoryItems.findByIdAndDelete(itemId);
+
+  if (!deletedBudgetItem) {
+    return next(new AppError("Failed to delete Budget Category Item", 404));
+  }
+
+  return res.status(200).json({
+    message: "Budget Category Item Successfully Deleted",
+    deletedBudgetItem,
+  });
+});
+
 module.exports = {
   budgetCategory_get,
   budgetCategory_post,
   budgetCategory_put,
   budgetCategory_delete,
   budgetCategoryItem_post,
+  budgetCategoryItem_delete, // Export the new delete function
 };
