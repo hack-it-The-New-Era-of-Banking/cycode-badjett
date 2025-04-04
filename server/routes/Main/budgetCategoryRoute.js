@@ -14,4 +14,6 @@ router.put("/", budgetCategoryController.budgetCategory_put);
 // Delete Budget Category
 router.delete("/", budgetCategoryController.budgetCategory_delete);
 
+// Create Budget Category Item
+router.post("/item", budgetCategoryController.budgetCategoryItem_post);
 module.exports = router;
