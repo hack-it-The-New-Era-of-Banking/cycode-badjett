@@ -10,6 +10,8 @@ const DashboardPage = (props) => {
 
   const [budgets, setBudgets] = useState([]); // State to store fetched budgets
   const [totalBudget, setTotalBudget] = useState(0); // State to store the total budget
+  const [expenses, setExpenses] = useState([]); // State to store fetched budgets
+  const [totalExpenses, setTotalExpenses] = useState(0); // State to store the total expenses
 
   // Fetch budgets from the API
   useEffect(() => {
@@ -38,6 +40,24 @@ const DashboardPage = (props) => {
       }
     };
 
+    const fetchExpenses = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_URL}/expense?userId=${currentUser._id}`,
+          {
+            headers: {
+              Authorization: `${token}`, // Add the token to the Authorization header
+            },
+          }
+        );
+        setExpenses(response.data); // Update the expenses state with the fetched data
+        setTotalExpenses(response.data.month); // Update the total budget state
+      } catch (error) {
+        console.error("Error fetching budgets:", error);
+        alert("Failed to fetch budgets. Please try again.");
+      }
+    };
+
     fetchBudgets();
   }, [currentUser._id, token]); // Run the effect when the user ID or token changes
 
@@ -59,7 +79,9 @@ const DashboardPage = (props) => {
             </p>
           </div>
           <div className="dashboard-summary">
-            <p className="title">Total Expenses: $10k</p>
+            <p className="title">
+              Total Expenses: ₱{totalExpenses.toLocaleString()}
+            </p>
           </div>
           <div className="dashboard-summary">
             <p className="title">Total Savings: $10k</p>
@@ -138,32 +160,25 @@ const DashboardPage = (props) => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="border border-gray-300 px-4 py-2">Coffee</td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    Starbucks
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    2023-03-01
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">$5.00</td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    <button className="text-primary">Edit</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 px-4 py-2">
-                    Groceries
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">Walmart</td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    2023-03-02
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">$50.00</td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    <button className="text-primary">Edit</button>
-                  </td>
-                </tr>
+                {expenses.map((expense) => (
+                  <tr key={expense._id}>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {expense.description}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {expense.merchant}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {new Date(expense.date).toLocaleDateString()}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      ₱{expense.amount.toLocaleString()}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      <button className="text-primary">Edit</button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

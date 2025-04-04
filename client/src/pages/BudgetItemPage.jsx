@@ -39,6 +39,25 @@ const BudgetItemPage = () => {
     fetchCategory();
   }, [id]); // Run the effect when the `id` changes
 
+  // Handle delete item
+  const handleDelete = async (itemId) => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_URL}/budget/item?id=${itemId}`,
+        {
+          headers: {
+            Authorization: `${token}`, // Add the token to the Authorization header
+          },
+        }
+      );
+      alert("Item deleted successfully!");
+      setItems((prevItems) => prevItems.filter((item) => item._id !== itemId)); // Remove the deleted item from the list
+    } catch (error) {
+      console.error("Error deleting item:", error);
+      alert("Failed to delete item. Please try again.");
+    }
+  };
+
   const handleItemAdded = () => {
     // Refresh the category data after adding an item
     setLoading(true);
@@ -108,14 +127,25 @@ const BudgetItemPage = () => {
         {subcategories.map((subcategory, index) => (
           <div
             key={subcategory._id || index}
-            className="border-2 border-[#6147AA] rounded-xl p-4 shadow-sm flex justify-between items-center"
+            className="border-2 border-[#6147AA] rounded-xl p-4 shadow-sm flex relative"
           >
-            <span className="text-[16px] font-normal text-black">
-              {subcategory.itemName || "Unnamed Item"}
-            </span>
-            <span className="text-[16px] font-normal text-black">
-              ₱{subcategory.itemPrice || 0}
-            </span>
+            {/* Delete Button */}
+            <div
+              onClick={() => handleDelete(subcategory._id)}
+              className="absolute top-2 right-2 text-primary cursor-pointer hover:text-primary text-xl font-bold"
+              aria-label="Delete Item"
+            >
+              &times;
+            </div>
+
+            <div className="flex flex-col w-full mt-4">
+              <span className="text-[16px] font-normal text-black">
+                {subcategory.itemName || "Unnamed Item"}
+              </span>
+              <span className="text-[16px] font-normal text-black mt-2">
+                ₱{subcategory.itemPrice || 0}
+              </span>
+            </div>
           </div>
         ))}
       </div>
