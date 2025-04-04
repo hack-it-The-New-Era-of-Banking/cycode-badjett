@@ -66,7 +66,7 @@ const Chatbot = () => {
   }, [isOpen]);
 
   return (
-    <div>
+    <div className="z-60">
       {/* Chatbot Toggle Button */}
       <button
         onClick={toggleChatbot}

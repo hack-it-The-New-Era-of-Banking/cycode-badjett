@@ -40,6 +40,28 @@ const IncomePage = (props) => {
     fetchIncomeData();
   }, [currentUser._id, token]); // Run the effect when the user ID or token changes
 
+  // Handle delete income
+  const handleDelete = async (incomeId) => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_URL}/income?id=${incomeId}`, // Use the query parameter for the income ID
+        {
+          headers: {
+            Authorization: `${token}`, // Add the token to the Authorization header
+          },
+        }
+      );
+      alert("Income deleted successfully!");
+      // Refresh the income list after deletion
+      setIncomeData((prevIncomeData) =>
+        prevIncomeData.filter((income) => income._id !== incomeId)
+      );
+    } catch (error) {
+      console.error("Error deleting income:", error);
+      alert("Failed to delete income. Please try again.");
+    }
+  };
+
   return (
     <>
       <div className="md:ml-64">
@@ -74,7 +96,7 @@ const IncomePage = (props) => {
           <div>
             <h1 className="mb-4">This Month's Income</h1>
             <div>
-              {incomeData.map((income, index) => (
+              {incomeData.map((income) => (
                 <div
                   key={income._id}
                   className="flex items-center justify-between border-2 border-primary rounded-full p-2 px-4 mb-2"
@@ -83,8 +105,17 @@ const IncomePage = (props) => {
                     Generated ₱{income.totalIncome.toLocaleString()} from{" "}
                     {income.jobTitle} ({income.category})
                   </p>
-                  <div className="flex items-center justify-center font-bold text-xl border-amber-400 border-2 rounded-full w-8 h-8">
-                    $
+                  <div className="flex items-center">
+                    <div
+                      onClick={() => handleDelete(income._id)} // Call handleDelete with the income ID
+                      className="text-red-500 cursor-pointer hover:text-red-600 text-xl font-bold mr-4"
+                      aria-label="Delete Income"
+                    >
+                      &times;
+                    </div>
+                    <div className="flex items-center justify-center font-bold text-xl border-amber-400 border-2 rounded-full w-8 h-8">
+                      $
+                    </div>
                   </div>
                 </div>
               ))}

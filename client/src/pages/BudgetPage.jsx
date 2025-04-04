@@ -40,9 +40,7 @@ const BudgetPage = () => {
   const handleDelete = async (budgetId) => {
     try {
       await axios.delete(
-        `${import.meta.env.VITE_URL}/budget/${budgetId}?userId=${
-          currentUser._id
-        }`,
+        `${import.meta.env.VITE_URL}/budget?id=${budgetId}`, // Use the query parameter for the budget ID
         {
           headers: {
             Authorization: `${token}`, // Add the token to the Authorization header
@@ -63,39 +61,67 @@ const BudgetPage = () => {
   return (
     <div className="md:ml-64 min-h-screen pb-32">
       <h1 className="text-black break-words mb-4">My Budget</h1>
+
       {/* Budget List - Responsive */}
       <div className="flex flex-wrap gap-4 justify-between">
-        {budgets.map((budget) => (
-          <div
-            key={budget._id} // Use budget ID as the key
-            onClick={() => navigate(`/budget/${budget._id}`)} // Navigate to the budget item page on click
-            className="relative w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 flex-grow h-auto border-2 border-[#6147AA] rounded-xl p-4 shadow-sm flex items-center"
-          >
-            {/* Close Icon */}
-            <button
-              onClick={() => handleDelete(budget._id)} // Call handleDelete with the budget ID
-              className="absolute top-0 right-2 text-primary hover:text-primary text-xl font-bold"
-              aria-label="Delete Budget"
-            >
-              &times;
-            </button>
-            <div className="w-[50px] h-[50px] bg-[#D9D9D9] border-2 border-[#6147AA] rounded-full flex items-center justify-center mr-[15px]">
-              <span role="img" aria-label="icon">
-                📊
-              </span>
-            </div>
-            {/* Budget Details */}
-            <div className="flex-grow">
-              <h3 className="text-[20px] font-semibold text-black break-words flex justify-between">
-                <span>{budget.category}</span>
-                <span className="text-right">₱{budget.budget}</span>
-              </h3>
-              <p className="text-[16px] text-[#6147AA] font-normal break-words">
-                {budget.budget} Remaining
-              </p>
-            </div>
-          </div>
-        ))}
+        {budgets.length === 0 ? (
+          // Display this message if no budgets are fetched
+          <p className="text-gray-500">There is no budget available.</p>
+        ) : (
+          budgets.map((budget) => {
+            // Calculate the total spent by summing up itemPrice in categoryItems
+            const totalSpent = budget.categoryItems.reduce(
+              (sum, item) => sum + (item.itemPrice || 0),
+              0
+            );
+
+            return (
+              <div
+                key={budget._id} // Use budget ID as the key
+                onClick={() => navigate(`/budget/${budget._id}`)} // Navigate to the budget item page on click
+                className="relative w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 flex-grow h-auto border-2 border-[#6147AA] rounded-xl p-4 shadow-sm flex items-center"
+              >
+                {/* Close Icon */}
+                <div
+                  onClick={(event) => {
+                    event.stopPropagation(); // Prevent navigation
+                    handleDelete(budget._id); // Call handleDelete with the budget ID
+                  }}
+                  className="absolute -top-2 right-0 text-primary cursor-pointer hover:text-primary text-2xl font-bold"
+                  aria-label="Delete Budget"
+                >
+                  &times;
+                </div>
+                <div className="w-[50px] h-[50px] bg-[#D9D9D9] border-2 border-[#6147AA] rounded-full flex items-center justify-center mr-[15px]">
+                  <span role="img" aria-label="icon">
+                    📊
+                  </span>
+                </div>
+                {/* Budget Details */}
+                <div className="flex-grow">
+                  <h3 className="text-[20px] font-semibold text-black break-words flex justify-between">
+                    <span>{budget.category || "No Category"}</span>
+                    <span className="text-right">
+                      ₱{budget.budget.toLocaleString()}
+                    </span>
+                  </h3>
+                  <div className="relative w-full h-2 bg-gray-200 rounded-lg mt-2">
+                    <div
+                      className="absolute top-0 left-0 h-full bg-primary rounded-lg"
+                      style={{
+                        width: `${(totalSpent / (budget.budget || 1)) * 100}%`, // Calculate percentage spent
+                      }}
+                    ></div>
+                  </div>
+                  <p className="text-[16px] text-[#6147AA] font-normal break-words mt-2">
+                    ₱{totalSpent.toLocaleString()} spent of ₱
+                    {budget.budget.toLocaleString()}
+                  </p>
+                </div>
+              </div>
+            );
+          })
+        )}
         {/* Create New Budget Box */}
         <div
           onClick={openModal} // Open the modal when clicked
