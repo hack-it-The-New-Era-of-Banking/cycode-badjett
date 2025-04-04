@@ -59,7 +59,11 @@ const DashboardPage = (props) => {
             <div className="border-2 border-primary rounded-lg p-2 flex-grow justify-start items-start min-w-80 ">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <div className="w-12 h-12 rounded-full border-2 border-primary"></div>
+                  <div className="w-12 h-12 bg-[#D9D9D9] border-2 border-[#6147AA] rounded-full flex items-center justify-center mr-[15px]">
+                    <span role="img" aria-label="icon">
+                      📊
+                    </span>
+                  </div>
                   <p className="title">Groceries</p>
                 </div>
                 <div className="relative w-full h-2 bg-gray-200 rounded-lg">
@@ -73,7 +77,11 @@ const DashboardPage = (props) => {
             <div className="border-2 border-primary rounded-lg p-2 flex-grow justify-start items-start min-w-80">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <div className="w-12 h-12 rounded-full border-2 border-primary"></div>
+                  <div className="w-12 h-12 bg-[#D9D9D9] border-2 border-[#6147AA] rounded-full flex items-center justify-center mr-[15px]">
+                    <span role="img" aria-label="icon">
+                      📊
+                    </span>
+                  </div>
                   <p className="title">Groceries</p>
                 </div>
                 <div className="relative w-full h-2 bg-gray-200 rounded-lg">
@@ -87,7 +95,11 @@ const DashboardPage = (props) => {
             <div className="border-2 border-primary rounded-lg p-2 flex-grow justify-start items-start min-w-80">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <div className="w-12 h-12 rounded-full border-2 border-primary"></div>
+                  <div className="w-12 h-12 bg-[#D9D9D9] border-2 border-[#6147AA] rounded-full flex items-center justify-center mr-[15px]">
+                    <span role="img" aria-label="icon">
+                      📊
+                    </span>
+                  </div>
                   <p className="title">Groceries</p>
                 </div>
                 <div className="relative w-full h-2 bg-gray-200 rounded-lg">
