@@ -20,12 +20,16 @@ const user_get = catchAsync(async (req, res, next) => {
 
 // Delete User
 const user_delete = catchAsync(async (req, res, next) => {
-  const { id } = req.query;
-  if (id === req.userId) {
-    await User.findByIdAndDelete(id);
-    return res.status(200).json("Account Successfully Deleted");
+  const { userId } = req.query;
+  if (userId === req.userId) {
+    await User.findByIdAndDelete(userId);
+    return res.status(200).json({
+      message: "User deleted successfully",
+    });
   } else {
-    return res.status(403).json("You can only delete your own account");
+    return res.status(403).json({
+      message: "You can only delete your own account",
+    });
   }
 });
 
