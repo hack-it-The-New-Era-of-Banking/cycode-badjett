@@ -157,7 +157,7 @@ const ExpensesPage = () => {
             
             {/* Form Fields */}
             <div className="mb-4">
-              <label className="block text-black font-semibold mb-2">Item Name:</label>
+              <label className="block text-[#6147AA] font-semibold mb-2">Item Name:</label>
               <input
                 type="text"
                 placeholder="Enter item name"
@@ -167,7 +167,7 @@ const ExpensesPage = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-black font-semibold mb-2">Merchant:</label>
+              <label className="block text-[#6147AA] font-semibold mb-2">Merchant:</label>
               <input
                 type="text"
                 placeholder="Enter merchant name"
@@ -177,7 +177,7 @@ const ExpensesPage = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-black font-semibold mb-2">Category:</label>
+              <label className="block text-[#6147AA] font-semibold mb-2">Category:</label>
               <input
                 type="text"
                 placeholder="Enter category"
@@ -187,16 +187,16 @@ const ExpensesPage = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-black font-semibold mb-2">Date:</label>
+              <label className="block text-[#6147AA] font-semibold mb-2">Date:</label>
               <input
                 type="date"
-                className="border-2 border-[#6147AA] rounded-[10px] px-4 py-2 w-full"
+                className="border-2 border-[#6147AA] rounded-[10px] px-4 py-2 w-full text-gray-500"
                 value={newExpense.date}
                 onChange={(e) => setNewExpense({ ...newExpense, date: e.target.value })}
               />
             </div>
             <div className="mb-4">
-              <label className="block text-black font-semibold mb-2">Amount:</label>
+              <label className="block text-[#6147AA] font-semibold mb-2">Amount:</label>
               <input
                 type="number"
                 placeholder="Enter amount"
