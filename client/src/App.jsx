@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { UserProvider } from "./context/UserContext";
+
 // import { useUser } from "./contexts/UserContext";
 
 //pages
@@ -12,6 +13,7 @@ import ExpensesPage from "./pages/ExpensesPage";
 import IncomePage from "./pages/IncomePage";
 import InvestmentPage from "./pages/InvestmentPage";
 import NotFound from "./pages/NotFoundPage";
+import Chatbot from "./components/Chatbot";
 
 //components
 import Sidebar from "./components/Sidebar";
@@ -32,11 +34,10 @@ function App() {
       {/* Wrap the app with UserProvider */}
       {!isAuthRoute && <Header />}
       {!isAuthRoute && <Sidebar />}
+      {!isAuthRoute && <Chatbot />}
       <Routes>
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<LoginPage />} />
-
-     
 
         <Route
           path="/"
@@ -54,7 +55,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/budgetitem" element={<BudgetItemPage />} />
+        <Route path="/budget/:id" element={<BudgetItemPage />} />
         <Route
           path="/expenses"
           element={
