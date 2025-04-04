@@ -36,8 +36,6 @@ function App() {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<LoginPage />} />
 
-     
-
         <Route
           path="/"
           element={
@@ -54,7 +52,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/budgetitem" element={<BudgetItemPage />} />
+        <Route path="/budget/:id" element={<BudgetItemPage />} />
         <Route
           path="/expenses"
           element={
