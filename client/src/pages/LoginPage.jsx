@@ -99,7 +99,7 @@ const LoginPage = () => {
             type="submit"
             className="w-full py-2 px-4 bg-purple-800 text-white font-semibold rounded-lg hover:bg-purple-700 transition"
           >
-            Sign
+            Log In
           </button>
         </form>
       </div>
