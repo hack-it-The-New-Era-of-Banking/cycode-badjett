@@ -6,12 +6,8 @@ const incomeSchema = new mongoose.Schema(
     jobTitle: {
       type: String,
     },
-    earnedIncome: {
-      type: mongoose.Types.Decimal128,
-    },
-    additionalCompensation: {
-      type: mongoose.Types.Decimal128,
-    },
+    earnedIncome: Number,
+    additionalCompensation: Number,
     category: {
       type: String,
       enum: ["Passive", "Monthly"],

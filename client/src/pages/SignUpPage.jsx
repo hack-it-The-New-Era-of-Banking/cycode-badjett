@@ -1,13 +1,60 @@
-import Sidebar from "../components/Sidebar";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import axios from "axios";
 
 const SignUpPage = () => {
   const [agreed, setAgreed] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Form submitted", formData);
+
+    if (!agreed) {
+      alert("Please agree to the terms and conditions.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_URL}/auth/signup`,
+        formData
+      );
+      console.log("Response from server:", response);
+      if (response.status === 200) {
+        navigate("/login");
+      } else {
+        alert("Signup failed. Please try again.");
+      }
+    } catch (e) {
+      console.error("Error during signup:", e);
+    }
+  };
 
   return (
     <>
       <div className="flex justify-center mt-8">
-        <form className="w-full max-w-sm space-y-4 p-6 bg-gray-50 rounded-lg border-2 border-purple-800">
+        <form
+          className="w-full max-w-sm space-y-4 p-6 bg-gray-50 rounded-lg border-2 border-purple-800"
+          onSubmit={handleSubmit}
+        >
+          {/* Heading inside form */}
           <div className="text-center mb-4">
             <h1 className="text-3xl font-bold text-gray-800">
               Create your account
@@ -21,6 +68,9 @@ const SignUpPage = () => {
             <input
               type="text"
               placeholder="Enter your first name"
+              onChange={handleChange}
+              value={formData.firstName}
+              name="firstName"
               className="w-full h-10 px-3 rounded-lg border-2 border-purple-800 outline-none focus:ring-2 focus:ring-purple-500"
             />
           </div>
@@ -31,6 +81,9 @@ const SignUpPage = () => {
             <input
               type="text"
               placeholder="Enter your last name"
+              onChange={handleChange}
+              value={formData.lastName}
+              name="lastName"
               className="w-full h-10 px-3 rounded-lg border-2 border-purple-800 outline-none focus:ring-2 focus:ring-purple-500"
             />
           </div>
@@ -41,6 +94,9 @@ const SignUpPage = () => {
             <input
               type="email"
               placeholder="Enter your email"
+              onChange={handleChange}
+              value={formData.email}
+              name="email"
               className="w-full h-10 px-3 rounded-lg border-2 border-purple-800 outline-none focus:ring-2 focus:ring-purple-500"
             />
           </div>
@@ -51,6 +107,9 @@ const SignUpPage = () => {
             <input
               type="password"
               placeholder="Enter your password"
+              onChange={handleChange}
+              value={formData.password}
+              name="password"
               className="w-full h-10 px-3 rounded-lg border-2 border-purple-800 outline-none focus:ring-2 focus:ring-purple-500"
             />
           </div>
@@ -60,11 +119,12 @@ const SignUpPage = () => {
               id="terms"
               checked={agreed}
               onChange={(e) => setAgreed(e.target.checked)}
+              value={agreed}
               className="h-4 w-4 text-purple-600 border-gray-300 rounded"
             />
             <label htmlFor="terms" className="ml-2 flex flex-wrap">
               <span className="text-slate-600 text-xs leading-tight mr-1">
-                By creating an account means you agree to the 
+                By creating an account means you agree to the
               </span>
               <span className="text-slate-600 text-xs font-bold leading-tight">
                 Terms and Conditions
