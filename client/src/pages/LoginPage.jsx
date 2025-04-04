@@ -99,18 +99,12 @@ const DashboardPage = () => {
             type="submit"
             className="w-full py-2 px-4 bg-purple-800 text-white font-semibold rounded-lg hover:bg-purple-700 transition"
           >
-            Sign Up
+            Sign
           </button>
-          {/* Already have an account */}
-          <div className="flex justify-center mt-4">
-            <p className="text-gray-600">Already have an account?</p>
-            <a href="/login" className="text-purple-800 font-semibold ml-1">
-              Log In
-            </a>
-          </div>
         </form>
       </div>
     </>
   );
 };
+
 export default DashboardPage;
