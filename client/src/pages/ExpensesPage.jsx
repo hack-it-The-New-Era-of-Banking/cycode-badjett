@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import PlusSign from "../assets/icons/PlusSign.svg"; // Import the SVG icon
 import { useUser } from "../context/UserContext";
 
 const ExpensesPage = () => {
@@ -115,6 +114,12 @@ const ExpensesPage = () => {
         >
           Apply Filters
         </button>
+        <button
+          className="bg-[#6147AA] text-white px-4 py-2 rounded-[10px]"
+          onClick={openModal}
+        >
+          Add New Expense
+        </button>
       </div>
 
       {/* Recent Expenses Table */}
@@ -142,15 +147,6 @@ const ExpensesPage = () => {
             ))}
           </tbody>
         </table>
-      </div>
-
-      {/* Add Expense Button */}
-      <div
-        onClick={openModal}
-        className="mt-6 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 flex-grow h-auto border-2 border-[#6147AA] rounded-[10px] p-4 shadow-sm flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100"
-      >
-        <img src={PlusSign} alt="Plus Icon" className="w-6 h-6 mb-2" />
-        <p className="text-[16px] font-semibold text-[#6147AA]">Add New Expense</p>
       </div>
 
       {/* Modal for Adding Expenses */}
