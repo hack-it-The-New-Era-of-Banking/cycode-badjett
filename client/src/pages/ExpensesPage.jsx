@@ -151,55 +151,76 @@ const ExpensesPage = () => {
 
       {/* Modal for Adding Expenses */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-[10px] shadow-lg">
-            <h2 className="text-lg font-bold mb-4">Add New Expense</h2>
-            <input
-              type="text"
-              placeholder="Item"
-              className="border-2 border-[#6147AA] rounded-[10px] px-4 py-2 mb-2 w-full"
-              value={newExpense.item}
-              onChange={(e) => setNewExpense({ ...newExpense, item: e.target.value })}
-            />
-            <input
-              type="text"
-              placeholder="Merchant"
-              className="border-2 border-[#6147AA] rounded-[10px] px-4 py-2 mb-2 w-full"
-              value={newExpense.merchant}
-              onChange={(e) => setNewExpense({ ...newExpense, merchant: e.target.value })}
-            />
-            <input
-              type="text"
-              placeholder="Category"
-              className="border-2 border-[#6147AA] rounded-[10px] px-4 py-2 mb-2 w-full"
-              value={newExpense.category}
-              onChange={(e) => setNewExpense({ ...newExpense, category: e.target.value })}
-            />
-            <input
-              type="date"
-              className="border-2 border-[#6147AA] rounded-[10px] px-4 py-2 mb-2 w-full"
-              value={newExpense.date}
-              onChange={(e) => setNewExpense({ ...newExpense, date: e.target.value })}
-            />
-            <input
-              type="number"
-              placeholder="Amount"
-              className="border-2 border-[#6147AA] rounded-[10px] px-4 py-2 mb-2 w-full"
-              value={newExpense.amount}
-              onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })}
-            />
-            <button
-              className="bg-[#6147AA] text-white px-4 py-2 rounded-[10px] mt-4"
-              onClick={handleAddExpense}
-            >
-              Add Expense
-            </button>
-            <button
-              className="bg-red-500 text-white px-4 py-2 rounded-[10px] mt-4 ml-2"
-              onClick={closeModal}
-            >
-              Close
-            </button>
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center">
+          <div className="bg-white w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 border-2 border-[#6147AA] rounded-xl p-6 shadow-lg">
+            <h2 className="text-lg font-bold mb-4 text-[#6147AA]">Add New Expense</h2>
+            
+            {/* Form Fields */}
+            <div className="mb-4">
+              <label className="block text-black font-semibold mb-2">Item Name:</label>
+              <input
+                type="text"
+                placeholder="Enter item name"
+                className="border-2 border-[#6147AA] rounded-[10px] px-4 py-2 w-full"
+                value={newExpense.item}
+                onChange={(e) => setNewExpense({ ...newExpense, item: e.target.value })}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-black font-semibold mb-2">Merchant:</label>
+              <input
+                type="text"
+                placeholder="Enter merchant name"
+                className="border-2 border-[#6147AA] rounded-[10px] px-4 py-2 w-full"
+                value={newExpense.merchant}
+                onChange={(e) => setNewExpense({ ...newExpense, merchant: e.target.value })}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-black font-semibold mb-2">Category:</label>
+              <input
+                type="text"
+                placeholder="Enter category"
+                className="border-2 border-[#6147AA] rounded-[10px] px-4 py-2 w-full"
+                value={newExpense.category}
+                onChange={(e) => setNewExpense({ ...newExpense, category: e.target.value })}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-black font-semibold mb-2">Date:</label>
+              <input
+                type="date"
+                className="border-2 border-[#6147AA] rounded-[10px] px-4 py-2 w-full"
+                value={newExpense.date}
+                onChange={(e) => setNewExpense({ ...newExpense, date: e.target.value })}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-black font-semibold mb-2">Amount:</label>
+              <input
+                type="number"
+                placeholder="Enter amount"
+                className="border-2 border-[#6147AA] rounded-[10px] px-4 py-2 w-full"
+                value={newExpense.amount}
+                onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })}
+              />
+            </div>
+
+            {/* Buttons */}
+            <div className="flex justify-end gap-4 mt-4">
+              <button
+                className="bg-gray-200 text-black px-4 py-2 rounded-[10px] border border-gray-300 hover:bg-gray-300"
+                onClick={closeModal}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-[#6147AA] text-white px-4 py-2 rounded-[10px] hover:bg-[#503a8c]"
+                onClick={handleAddExpense}
+              >
+                Add
+              </button>
+            </div>
           </div>
         </div>
       )}
