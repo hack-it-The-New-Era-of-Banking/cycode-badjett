@@ -1,4 +1,5 @@
 const BudgetCategory = require("../../models/Main/BudgetCategory");
+const BudgetCategoryItems = require("../../models/Main/BudgetCategoryItems");
 const User = require("../../models/User/User");
 const AppError = require("../../utilities/appError");
 const catchAsync = require("../../utilities/catchAsync");
@@ -15,10 +16,12 @@ const budgetCategory_get = catchAsync(async (req, res, next) => {
   id
     ? (budgetCategory = await BudgetCategory.findById(id)
         .populate("totalSpent")
-        .populate("userId"))
+        .populate("userId")
+        .populate("categoryItems"))
     : (budgetCategory = await BudgetCategory.find({ userId: userId })
         .populate("totalSpent")
-        .populate("userId"));
+        .populate("userId")
+        .populate("categoryItems"));
 
   if (Array.isArray(budgetCategory)) {
     budgetCategory = budgetCategory.map((category) => {
@@ -167,9 +170,49 @@ const budgetCategory_delete = catchAsync(async (req, res, next) => {
   });
 });
 
+// Create Budget Category Item
+const budgetCategoryItem_post = catchAsync(async (req, res, next) => {
+  const { categoryId } = req.query; // Only include categoryId in the query
+  const { itemName, itemPrice } = req.body;
+
+  // Validate category
+  const isCategoryValid = await BudgetCategory.findById(categoryId);
+  if (!isCategoryValid) {
+    return next(new AppError("Category not found. Invalid Category ID.", 404));
+  }
+
+  // Validate itemName and itemPrice
+  if (!itemName || !itemPrice) {
+    return next(new AppError("Item name and item price are required.", 400));
+  }
+
+  // Create a new BudgetCategoryItem
+  const newBudgetCategoryItem = new BudgetCategoryItems({
+    categoryId,
+    itemName,
+    itemPrice,
+  });
+
+  // Save the new item
+  await newBudgetCategoryItem.save();
+
+  // Add the new item to the category's `categoryItems` array
+  await BudgetCategory.findByIdAndUpdate(
+    categoryId,
+    { $push: { categoryItems: newBudgetCategoryItem._id } },
+    { new: true }
+  );
+
+  return res.status(200).json({
+    message: "Budget Category Item Successfully Created",
+    newBudgetCategoryItem,
+  });
+});
+
 module.exports = {
   budgetCategory_get,
   budgetCategory_post,
   budgetCategory_put,
   budgetCategory_delete,
+  budgetCategoryItem_post,
 };
