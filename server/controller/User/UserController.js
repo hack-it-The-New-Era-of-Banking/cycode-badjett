@@ -6,11 +6,9 @@ const catchAsync = require("../../utilities/catchAsync");
 
 // Get User by Id or Username
 const user_get = catchAsync(async (req, res, next) => {
-  const { userId, username } = req.query;
+  const { userId } = req.query;
 
-  const user = userId
-    ? await User.findById(userId)
-    : await User.findOne({ username: username })
+  const user = await User.findById(userId)
   const { password, likedPost, __v, ...other } = user._doc;
 
   if (!user) return next(new AppError("User not found", 404));
