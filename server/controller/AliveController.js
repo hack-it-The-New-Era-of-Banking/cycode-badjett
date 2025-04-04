@@ -1,4 +1,4 @@
-const catchAsync = require("../Utilities/catchAsync");
+const catchAsync = require("../utilities/catchAsync");
 
 const alive = catchAsync(async (req, res, next) => {
   // return a message if server is alive
