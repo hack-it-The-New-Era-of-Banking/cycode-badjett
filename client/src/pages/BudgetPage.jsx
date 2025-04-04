@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import PlusSign from "../assets/icons/PlusSign.svg"; // Import the SVG icon
+import AddBudgetModalCategory from "../modals/AddBudgetCategory";
 
 const BudgetPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
+
+  const openModal = () => setIsModalOpen(true); // Function to open the modal
+  const closeModal = () => setIsModalOpen(false); // Function to close the modal
+
   const budgets = [
     { category: "Groceries", amount: 1000 },
     { category: "Transportation", amount: 800 },
@@ -46,7 +52,7 @@ const BudgetPage = () => {
 
         {/* Create New Budget Box */}
         <div
-          onClick={() => alert("Add a new budget functionality here!")} // Replace with your actual function
+          onClick={openModal} // Open the modal when clicked
           className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 flex-grow h-auto border-2 border-[#6147AA] rounded-xl p-4 shadow-sm flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100"
         >
           {/* Plus Icon */}
@@ -56,6 +62,11 @@ const BudgetPage = () => {
           </p>
         </div>
       </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <AddBudgetModalCategory onCancel={closeModal} /> // Pass closeModal to the modal
+      )}
     </div>
   );
 };
