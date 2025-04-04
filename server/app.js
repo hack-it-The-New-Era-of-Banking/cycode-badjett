@@ -11,13 +11,12 @@ const authRoute = require("./routes/User/authRoute");
 const userRoute = require("./routes/User/userRoute");
 
 // main functionalities
-// const todoRoute = require("./routes/Main/toDoRoute");
 
 // utility
 const aliveRoute = require("./routes/aliveRoute");
 const AppError = require("./utilities/appError");
 const checkAuth = require("./utilities/checkAuth");
-const globalErrorHandler = require("./controllers/ErrorController");
+const globalErrorHandler = require("./controller/ErrorController");
 
 // initializations
 const app = express();
@@ -36,7 +35,7 @@ app.use(
     limit: "10kb",
   })
 ); // Body Parser
-app.use(mongoSanitize()); //Data sanization against NoSQL query injection
+// app.use(mongoSanitize()); //Data sanization against NoSQL query injection
 app.use(hpp()); // prevent paramater pollution
 app.use(cors()); // Cross Origin Resource Sharing
 app.use(express.json());
@@ -49,19 +48,32 @@ app.use("/api", limiter); //Protection Against DDOS Attack
 
 // routes
 // user
+// app.use("/api/auth", authRoute);
+// app.use("/api/user", checkAuth, userRoute);
+
+// // main functionalities
+
+// // utility
+// app.use("/api/alive", aliveRoute);
+
+console.log("Mounting /api/auth");
 app.use("/api/auth", authRoute);
+
+console.log("Mounting /api/user");
 app.use("/api/user", checkAuth, userRoute);
 
-// main functionalities
-// app.use("/api/todo", checkAuth, todoRoute);
-
-// utility
+console.log("Mounting /api/alive");
 app.use("/api/alive", aliveRoute);
 
 // route catch
-app.all("*", (req, res, next) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
-});
+// app.all("*", (req, res, next) => {
+//   console.log(req.originalUrl)
+//   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+// });
 app.use(globalErrorHandler);
 
+
+
+
 module.exports = app;
+

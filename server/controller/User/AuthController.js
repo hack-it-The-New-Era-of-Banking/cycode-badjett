@@ -2,7 +2,7 @@ const User = require("../../models/User/User");
 const InvalidToken = require("../../models/InvalidToken");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const catchAsync = require("../../utilities/catchAsync");
+const catchAsync = require("../../Utilities/catchAsync");
 const AppError = require("../../utilities/appError");
 
 // Login route
@@ -38,7 +38,8 @@ const user_login = catchAsync(async (req, res, next) => {
 // Signup route
 const user_signup = catchAsync(async (req, res, next) => {
   const {
-    fullName,
+    firstName,
+    lastName,
     email,
     username,
     password,
@@ -63,7 +64,8 @@ const user_signup = catchAsync(async (req, res, next) => {
 
   // Create new user
   const user = await User.create({
-    fullName,
+    firstName,
+    lastName,
     email,
     username,
     password: hashedPassword, // Save the hashed password

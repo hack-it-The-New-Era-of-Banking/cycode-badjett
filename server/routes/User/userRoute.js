@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../../controller/User/UserController");
-const notificationController = require("./../../controller/Content/NotificationController");
+// const notificationController = require("./../../controller/Content/NotificationController");
 
 // Get User
 router.get("/", userController.user_get);

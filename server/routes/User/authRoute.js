@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const authController = require("../../controller/User/AuthController");
-const checkAuth = require("../../Utilities/checkAuth");
+const checkAuth = require("../../utilities/checkAuth");
 
 // REGISTER
 router.post("/signup", authController.user_signup);

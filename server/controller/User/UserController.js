@@ -2,7 +2,7 @@ const User = require("../../models/User/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const AppError = require("../../utilities/appError");
-const catchAsync = require("../../utilities/catchAsync");
+const catchAsync = require("../../Utilities/catchAsync");
 
 // Get User by Id or Username
 const user_get = catchAsync(async (req, res, next) => {
