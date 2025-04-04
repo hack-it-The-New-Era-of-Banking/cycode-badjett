@@ -10,7 +10,7 @@
   }
 
   .dashboard-summary {
-    @apply flex flex-1 items-center justify-between rounded-lg shadow-md p-4;
+    @apply flex flex-1 items-center justify-between rounded-lg  p-4 border-2 border-primary;
   }
 
   .title {
