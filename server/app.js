@@ -11,6 +11,7 @@ const authRoute = require("./routes/User/authRoute");
 const userRoute = require("./routes/User/userRoute");
 
 // main functionalities
+const budgetCategoryRoute = require("./routes/Main/budgetCategoryRoute");
 
 // utility
 const aliveRoute = require("./routes/aliveRoute");
@@ -48,21 +49,14 @@ app.use("/api", limiter); //Protection Against DDOS Attack
 
 // routes
 // user
-// app.use("/api/auth", authRoute);
-// app.use("/api/user", checkAuth, userRoute);
-
-// // main functionalities
-
-// // utility
-// app.use("/api/alive", aliveRoute);
-
-console.log("Mounting /api/auth");
 app.use("/api/auth", authRoute);
-
-console.log("Mounting /api/user");
 app.use("/api/user", checkAuth, userRoute);
 
-console.log("Mounting /api/alive");
+// main functionalities
+app.use("/api/budget", checkAuth, budgetCategoryRoute);
+
+
+// utility
 app.use("/api/alive", aliveRoute);
 
 // route catch
