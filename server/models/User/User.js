@@ -15,11 +15,6 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    username: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     password: {
       type: String,
       required: true,
@@ -29,6 +24,7 @@ const userSchema = new mongoose.Schema(
     },
     token: String,
     budgetCategory: [{ type: mongoose.Schema.Types.ObjectId, ref: "BudgetCategory" }],
+    income: [{ type: mongoose.Schema.Types.ObjectId, ref: "Income" }],
 
     // connect budget info
     // connect expenses
