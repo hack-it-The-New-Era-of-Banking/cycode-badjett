@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 //pages
-import LoginPage from "./pages/LoginPage";
+import SignUpPage from "./pages/SignUpPage";
 import DashboardPage from "./pages/DashboardPage";
 import NotFound from "./pages/NotFoundPage";
 
@@ -17,7 +17,7 @@ function App() {
         <Sidebar />
         <Routes>
           <Route path="/" element={<DashboardPage />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>
