@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema(
     },
     token: String,
 
-    // connect budget categ
+    // connect budget info
     // connect expenses
   },
   {
