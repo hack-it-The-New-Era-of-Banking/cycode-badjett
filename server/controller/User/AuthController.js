@@ -64,20 +64,20 @@ const user_signup = catchAsync(async (req, res, next) => {
 
   await user.save();
 
-  await BudgetCategory.create({ user: user._id, category: "Food" });
-    await BudgetCategory.create({ user: user._id, category: "Rent" });
-    await BudgetCategory.create({ user: user._id, category: "Electricity" });
-    await BudgetCategory.create({ user: user._id, category: "Water" });
-    await BudgetCategory.create({ user: user._id, category: "Internet" });
-    await BudgetCategory.create({ user: user._id, category: "Transportation" });
-    await BudgetCategory.create({ user: user._id, category: "School Fees" });
-    await BudgetCategory.create({ user: user._id, category: "Health" });
-    await BudgetCategory.create({ user: user._id, category: "Hobbies" });
-    await BudgetCategory.create({ user: user._id, category: "Clothing" });
-    await BudgetCategory.create({ user: user._id, category: "Personal Care" });
-    await BudgetCategory.create({ user: user._id, category: "Utilities" });
-    await BudgetCategory.create({ user: user._id, category: "Miscellaneous" });
-    await BudgetCategory.create({ user: user._id, category: "Dining Out / Takeout" });
+  await BudgetCategory.create({ userId: user._id, category: "Food" });
+    await BudgetCategory.create({ userId: user._id, category: "Rent" });
+    await BudgetCategory.create({ userId: user._id, category: "Electricity" });
+    await BudgetCategory.create({ userId: user._id, category: "Water" });
+    await BudgetCategory.create({ userId: user._id, category: "Internet" });
+    await BudgetCategory.create({ userId: user._id, category: "Transportation" });
+    await BudgetCategory.create({ userId: user._id, category: "School Fees" });
+    await BudgetCategory.create({ userId: user._id, category: "Health" });
+    await BudgetCategory.create({ userId: user._id, category: "Hobbies" });
+    await BudgetCategory.create({ userId: user._id, category: "Clothing" });
+    await BudgetCategory.create({ userId: user._id, category: "Personal Care" });
+    await BudgetCategory.create({ userId: user._id, category: "Utilities" });
+    await BudgetCategory.create({ userId: user._id, category: "Miscellaneous" });
+    await BudgetCategory.create({ userId: user._id, category: "Dining Out / Takeout" });
 
   const token = jwt.sign({ user: user }, process.env.JWT_KEY, {
     expiresIn: "30d",
