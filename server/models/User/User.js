@@ -23,7 +23,27 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
     token: String,
-    budgetCategory: [{ type: mongoose.Schema.Types.ObjectId, ref: "BudgetCategory" }],
+    preferences: {
+      type: [String],
+      enum: [
+        "Sports",
+        "Music",
+        "Travel",
+        "Art",
+        "Technology",
+        "Food",
+        "Video Games",
+        "Comics and Manga",
+        "Self-Care",
+        "Travelling",
+        "Home Decorations",
+        "Sneaker Collecting",
+      ],
+      required: true,
+    },
+    budgetCategory: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "BudgetCategory" },
+    ],
     income: [{ type: mongoose.Schema.Types.ObjectId, ref: "Income" }],
     expense: [{ type: mongoose.Schema.Types.ObjectId, ref: "Expenses" }],
 
