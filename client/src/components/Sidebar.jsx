@@ -92,7 +92,7 @@ const Sidebar = (props) => {
           </div>
         </div>
         <div
-          className="sidebar-option w-full bg-white mt-4 rounded-lg"
+          className="sidebar-option w-full bg-primary mt-4 rounded-lg"
           onClick={() => {
             logout();
             navigate("/login");
@@ -159,7 +159,7 @@ const Sidebar = (props) => {
           </div>
         </div>
         <div
-          className="sidebar-option w-full bg-white mt-4 rounded-lg"
+          className="sidebar-option w-full cursor-pointer text-primary mt-4 rounded-lg"
           onClick={() => {
             logout();
             navigate("/login");

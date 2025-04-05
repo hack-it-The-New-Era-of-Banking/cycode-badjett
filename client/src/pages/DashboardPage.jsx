@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useUser } from "../context/UserContext";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import ExpensesBarChart from "../components/dashboard/ExpensesBarChart";
 import BalanceLineChart from "../components/dashboard/BalanceLineChart";
 import axios from "axios";
+import ReactMarkdown from "react-markdown"; // Import React Markdown
 
 const DashboardPage = () => {
   const { user, token } = useUser();
   const currentUser = user.user;
+  const navigate = useNavigate(); // Initialize navigate hook
 
-  // Check localStorage for previously selected interests
+  // State declarations
   const [showInterestsModal, setShowInterestsModal] = useState(false);
   const [selectedInterests, setSelectedInterests] = useState([]);
   const [budgets, setBudgets] = useState([]);
@@ -241,7 +244,7 @@ const DashboardPage = () => {
           </p>
         </div>
 
-        {/* Dashboard AI Insight */}
+        {/* Dashboard AI Insight - Updated with React Markdown */}
         <div className="bg-white border-2 mb-6 border-[#6147AA] rounded-lg p-4 shadow-md transition-all duration-300">
           {insightData.loading ? (
             <div className="flex items-center justify-center h-32">
@@ -260,7 +263,7 @@ const DashboardPage = () => {
                     error: null,
                   }));
                   // Retry fetching insights
-                  fetchInsights();
+                  fetchExpenseInsights();
                 }}
               >
                 Retry
@@ -283,9 +286,11 @@ const DashboardPage = () => {
                   </p>
                 </div>
               </div>
-              <p className="text-gray-700 whitespace-pre-line">
-                {insightData.tip}
-              </p>
+
+              {/* Replace regular paragraph with ReactMarkdown */}
+              <div className="text-gray-700 prose prose-sm max-w-none">
+                <ReactMarkdown>{insightData.tip}</ReactMarkdown>
+              </div>
             </div>
           )}
         </div>
@@ -324,28 +329,95 @@ const DashboardPage = () => {
           </div>
         </div>
 
-        {/* User Budgets */}
+        {/* User Budgets - Updated with real data */}
         <div className="mb-4">
-          <h2 className="mb-4">Budgets</h2>
+          <h2 className="mb-4 text-lg font-semibold">Budgets</h2>
           <div className="flex flex-wrap gap-4">
-            <div className="border-2 border-primary rounded-lg p-2 flex-grow justify-start items-start min-w-80">
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-12 h-12 bg-[#D9D9D9] border-2 border-[#6147AA] rounded-full flex items-center justify-center mr-[15px]">
-                    <span role="img" aria-label="icon">
-                      📊
-                    </span>
-                  </div>
-                  <p className="title">Groceries</p>
-                </div>
-                <div className="relative w-full h-2 bg-gray-200 rounded-lg">
-                  <div
-                    className="absolute top-0 left-0 h-full bg-primary rounded-lg"
-                    style={{ width: "32%" }} // Replace with dynamic value if needed
-                  ></div>
+            {budgets.length === 0 ? (
+              <div className="border-2 border-primary rounded-lg p-4 flex-grow flex items-center justify-center min-h-36">
+                <div className="text-center">
+                  <p className="text-gray-500 mb-2">No budget categories yet</p>
+                  <button
+                    onClick={() => navigate("/budget")}
+                    className="bg-[#6147AA] text-white px-4 py-2 rounded-lg"
+                  >
+                    Create Your First Budget
+                  </button>
                 </div>
               </div>
-            </div>
+            ) : (
+              <>
+                {budgets.slice(0, 3).map((budget) => {
+                  // Calculate the total spent by summing up itemPrice in categoryItems
+                  const totalSpent =
+                    budget.categoryItems?.reduce(
+                      (sum, item) => sum + (item.itemPrice || 0),
+                      0
+                    ) || 0;
+
+                  // Calculate percentage spent (capped at 100%)
+                  const percentSpent = Math.min(
+                    (totalSpent / (budget.budget || 1)) * 100,
+                    100
+                  );
+
+                  return (
+                    <div
+                      key={budget._id}
+                      onClick={() => navigate(`/budget/${budget._id}`)}
+                      className="border-2 border-primary rounded-lg p-4 flex-grow cursor-pointer hover:bg-gray-50 transition-colors min-w-0 sm:min-w-80"
+                    >
+                      <div>
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="w-12 h-12 bg-[#D9D9D9] border-2 border-[#6147AA] rounded-full flex items-center justify-center mr-2">
+                            <span role="img" aria-label="icon">
+                              📊
+                            </span>
+                          </div>
+                          <div>
+                            <p className="font-semibold text-gray-800">
+                              {budget.category}
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              ₱{totalSpent.toLocaleString()} of ₱
+                              {(budget.budget || 0).toLocaleString()}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="relative w-full h-2 bg-gray-200 rounded-lg">
+                          <div
+                            className="absolute top-0 left-0 h-full bg-primary rounded-lg"
+                            style={{ width: `${percentSpent}%` }}
+                          ></div>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1 text-right">
+                          {percentSpent.toFixed(0)}% used
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {/* View all budgets button */}
+                {/* {budgets.length > 0 && (
+                  <div
+                    onClick={() => navigate("/budget")}
+                    className="border-2 border-primary rounded-lg p-4 flex-grow cursor-pointer hover:bg-gray-50 transition-colors flex items-center justify-center min-w-0 sm:min-w-80"
+                  >
+                    <div className="text-center">
+                      <div className="w-12 h-12 bg-[#F3E8FF] border-2 border-[#6147AA] rounded-full flex items-center justify-center mx-auto mb-2">
+                        <span className="text-xl">+</span>
+                      </div>
+                      <p className="text-[#6147AA] font-medium">
+                        {budgets.length > 3
+                          ? "View All Budgets"
+                          : "Add New Budget"}
+                      </p>
+                    </div>
+                  </div>
+                )} */}
+              </>
+            )}
           </div>
         </div>
 

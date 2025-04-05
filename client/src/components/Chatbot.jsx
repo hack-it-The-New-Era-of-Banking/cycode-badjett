@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useUser } from "../context/UserContext"; // Import the user context
 import axios from "axios"; // Import axios for API requests
 import WingmanLogo from "../assets/icons/Wingman-logo.png"; // Import the Wingman logo
+import ReactMarkdown from "react-markdown"; // Import ReactMarkdown for rendering markdown
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false); // State to toggle chatbot visibility
@@ -110,7 +111,7 @@ const Chatbot = () => {
                       : "bg-gray-200 text-black"
                   }`}
                 >
-                  {message.text}
+                  <ReactMarkdown>{message.text}</ReactMarkdown>
                 </span>
               </div>
             ))}

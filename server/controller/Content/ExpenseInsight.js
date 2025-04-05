@@ -8,11 +8,13 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 // Create Income
 const insight_post = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.userId).populate("expense");
-  const spendingSummary = user.expense.reduce((summary, expense) => {
-    summary[expense.category] =
-      (summary[expense.category] || 0) + expense.amount;
-    return summary;
-  }, {});
+  const spendingSummary = Array.isArray(user.expense)
+    ? user.expense.reduce((summary, expense) => {
+        summary[expense.category] =
+          (summary[expense.category] || 0) + expense.amount;
+        return summary;
+      }, {})
+    : {};
 
   const response = await openai.responses.create({
     model: "gpt-4o-mini-2024-07-18",

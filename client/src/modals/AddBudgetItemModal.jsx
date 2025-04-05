@@ -15,10 +15,12 @@ const AddBudgetItemModal = ({
   const [categoryDetails, setCategoryDetails] = useState(null);
   const [currentTotal, setCurrentTotal] = useState(0);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
   // Fetch category details and current items total
   useEffect(() => {
     const fetchCategoryDetails = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_URL}/budget?id=${categoryId}`,
@@ -29,20 +31,32 @@ const AddBudgetItemModal = ({
           }
         );
 
-        setCategoryDetails(response.data);
+        if (response.data) {
+          setCategoryDetails(response.data);
 
-        // Calculate current total spent
-        const total = response.data.categoryItems.reduce(
-          (sum, item) => sum + (item.itemPrice || 0),
-          0
-        );
-        setCurrentTotal(total);
+          // Calculate current total spent safely
+          const total = response.data.categoryItems
+            ? response.data.categoryItems.reduce(
+                (sum, item) => sum + (item.itemPrice || 0),
+                0
+              )
+            : 0;
+          setCurrentTotal(total);
+        } else {
+          console.error("No data received from API");
+          setError("Could not load category details");
+        }
       } catch (error) {
         console.error("Error fetching category details:", error);
+        setError("Error loading category details. Please try again.");
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchCategoryDetails();
+    if (categoryId && token) {
+      fetchCategoryDetails();
+    }
   }, [categoryId, token]);
 
   const handleChange = (e) => {
@@ -62,7 +76,7 @@ const AddBudgetItemModal = ({
     e.preventDefault();
 
     // Check if adding this item would exceed the budget
-    const newItemPrice = parseFloat(formData.itemPrice);
+    const newItemPrice = parseFloat(formData.itemPrice) || 0;
     const budget = categoryDetails?.budget || 0;
 
     if (currentTotal + newItemPrice > budget) {
@@ -80,17 +94,17 @@ const AddBudgetItemModal = ({
         formData,
         {
           headers: {
-            Authorization: ` ${token}`, // Add the token to the Authorization header
+            Authorization: `${token}`, // Add the token to the Authorization header
           },
         }
       );
       console.log("Item added successfully:", response.data);
-      onItemAdded(); // Callback to refresh the parent component
+      if (onItemAdded) onItemAdded(); // Callback to refresh the parent component
       window.location.reload();
       onCancel(); // Close the modal
     } catch (error) {
       console.error("Error adding item:", error);
-      alert("Failed to add item. Please try again.");
+      setError("Failed to add item. Please try again.");
     }
   };
 
@@ -107,26 +121,39 @@ const AddBudgetItemModal = ({
           Add Budget Item
         </h2>
 
-        {/* Budget Information */}
-        {categoryDetails && (
-          <div className="mb-4 text-sm">
-            <p className="font-medium">
-              Budget: ₱{categoryDetails.budget.toLocaleString()}
-            </p>
-            <p className="font-medium">
-              Spent so far: ₱{currentTotal.toLocaleString()} (
-              {categoryDetails.budget > 0
-                ? `${Math.round(
-                    (currentTotal / categoryDetails.budget) * 100
-                  )}%`
-                : "0%"}
-              )
-            </p>
-            <p className="font-medium">
-              Remaining: ₱
-              {(categoryDetails.budget - currentTotal).toLocaleString()}
-            </p>
+        {/* Loading State */}
+        {loading ? (
+          <div className="flex justify-center items-center h-24">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
           </div>
+        ) : error && !categoryDetails ? (
+          <div className="mb-4 p-2 bg-red-100 text-red-700 rounded-md">
+            {error}
+          </div>
+        ) : (
+          /* Budget Information */
+          categoryDetails && (
+            <div className="mb-4 text-sm">
+              <p className="font-medium">
+                Budget: ₱{(categoryDetails.budget || 0).toLocaleString()}
+              </p>
+              <p className="font-medium">
+                Spent so far: ₱{currentTotal.toLocaleString()} (
+                {categoryDetails.budget > 0
+                  ? `${Math.round(
+                      (currentTotal / categoryDetails.budget) * 100
+                    )}%`
+                  : "0%"}
+                )
+              </p>
+              <p className="font-medium">
+                Remaining: ₱
+                {(
+                  (categoryDetails.budget || 0) - currentTotal
+                ).toLocaleString()}
+              </p>
+            </div>
+          )
         )}
 
         {error && (
@@ -152,6 +179,7 @@ const AddBudgetItemModal = ({
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
               placeholder="Enter item name"
               required
+              disabled={loading}
             />
           </div>
           <div className="mb-4">
@@ -170,6 +198,7 @@ const AddBudgetItemModal = ({
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
               placeholder="Enter item price"
               required
+              disabled={loading}
             />
           </div>
           <div className="flex justify-end">
@@ -183,6 +212,7 @@ const AddBudgetItemModal = ({
             <button
               type="submit"
               className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark"
+              disabled={loading}
             >
               Add
             </button>

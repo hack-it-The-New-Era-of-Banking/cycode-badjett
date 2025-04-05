@@ -3,6 +3,7 @@ const AppError = require("../../utilities/appError");
 const catchAsync = require("../../utilities/catchAsync");
 const User = require("../../models/User/User");
 const Expense = require("../../models/Main/Expense"); // Import the Expense model
+const Income = require("../../models/Main/Income"); // Import the Income model
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -23,6 +24,8 @@ const chat_post = catchAsync(async (req, res, next) => {
     "category"
   );
 
+  const income = await Income.find({ userId: req.userId });
+
   // Create spending summary
   const spendingSummary = {};
   if (expenses && expenses.length > 0) {
@@ -37,12 +40,17 @@ const chat_post = catchAsync(async (req, res, next) => {
 
   // Safely get monthly income
   let monthlyIncome = 0;
-  if (user.income && user.income.length > 0) {
-    monthlyIncome = user.income.reduce(
-      (sum, inc) =>
-        sum + (inc.earnedIncome || 0) + (inc.additionalCompensation || 0),
-      0
-    );
+  let incomeDetails = [];
+  if (income && income.length > 0) {
+    monthlyIncome = income.reduce((sum, inc) => {
+      incomeDetails.push({
+        jobTitle: inc.jobTitle || "Unknown",
+        earnedIncome: inc.earnedIncome || 0,
+        additionalCompensation: inc.additionalCompensation || 0,
+        date: inc.date || "Unknown Date",
+      });
+      return sum + (inc.earnedIncome || 0) + (inc.additionalCompensation || 0);
+    }, 0);
   }
 
   // Safely get budget categories
@@ -76,7 +84,9 @@ const chat_post = catchAsync(async (req, res, next) => {
                         Be clear, concise, and supportive. Do not provide investment advice or legal financial recommendations.
 
                         You are a smart budgeting assistant. Here is the user's financial context:
-                        - Monthly Income: ₱${monthlyIncome}
+                        - Monthly Income: ₱${monthlyIncome}, ${JSON.stringify(
+            incomeDetails
+          )}
                         - Spending Habits: ${JSON.stringify(spendingSummary)}
                         - Budget Categories: ${budgetCategoriesString}
                         

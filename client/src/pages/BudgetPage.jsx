@@ -3,6 +3,7 @@ import axios from "axios";
 import PlusSign from "../assets/icons/PlusSign.svg"; // Import the SVG icon
 import { useUser } from "../context/UserContext"; // Import the user context
 import { useNavigate } from "react-router-dom";
+import AddBudgetModalCategory from "../modals/AddBudgetCategory"; // Import the modal component
 
 const BudgetPage = () => {
   const { token, user } = useUser(); // Get the token from the user context
@@ -32,7 +33,6 @@ const BudgetPage = () => {
     };
 
     fetchBudgets();
-
   }, [currentUser._id, token]); // Run the effect when the token or user ID changes
 
   // Handle delete budget
@@ -56,7 +56,6 @@ const BudgetPage = () => {
       alert("Failed to delete budget. Please try again.");
     }
   };
-
 
   return (
     <div className="md:ml-64 min-h-screen pb-32">
@@ -137,57 +136,15 @@ const BudgetPage = () => {
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center">
-          <div className="bg-white w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 border-2 border-[#6147AA] rounded-xl p-6 shadow-lg">
-            <h2 className="text-lg font-bold mb-4 text-[#6147AA]">Add New Budget</h2>
-            
-            {/* Description Section */}
-            <p className="text-sm text-gray-600 mb-4">
-              Please fill out the form below to create a new budget. Make sure to specify the category and the amount you want to allocate.
-            </p>
-
-            {/* Form Fields */}
-            <div className="mb-4">
-              <label className="block text-[#6147AA] font-semibold mb-2">Category:</label>
-              <input
-                type="text"
-                placeholder="Enter budget category"
-                className="border-2 border-[#6147AA] rounded-[10px] px-4 py-2 w-full"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-[#6147AA] font-semibold mb-2">Amount:</label>
-              <input
-                type="number"
-                placeholder="Enter budget amount"
-                className="border-2 border-[#6147AA] rounded-[10px] px-4 py-2 w-full"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-[#6147AA] font-semibold mb-2">Description:</label>
-              <textarea
-                placeholder="Enter budget description"
-                className="border-2 border-[#6147AA] rounded-[10px] px-4 py-2 w-full resize-none"
-                rows="3"
-              ></textarea>
-            </div>
-
-            {/* Buttons */}
-            <div className="flex justify-end gap-4 mt-4">
-              <button
-                className="bg-gray-200 text-black px-4 py-2 rounded-[10px] border border-gray-300 hover:bg-gray-300"
-                onClick={closeModal}
-              >
-                Cancel
-              </button>
-              <button
-                className="bg-[#6147AA] text-white px-4 py-2 rounded-[10px] hover:bg-[#503a8c]"
-              >
-                Add
-              </button>
-            </div>
-          </div>
-        </div>
+        <AddBudgetModalCategory
+          onCancel={closeModal}
+          // You can also pass additional props if needed
+          // onSuccess={() => {
+          //   closeModal();
+          //   // You could refresh budgets here instead of using window.location.reload()
+          //   // fetchBudgets();
+          // }}
+        />
       )}
     </div>
   );

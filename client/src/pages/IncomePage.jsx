@@ -64,7 +64,7 @@ const IncomePage = (props) => {
 
   return (
     <>
-      <div className="md:ml-64">
+      <div className="md:ml-64 md:pb-20">
         <div className="mb-4">
           <h1 className="">Hi, {currentUser.firstName}</h1>
           <p>Here's the summary of your latest generated income</p>

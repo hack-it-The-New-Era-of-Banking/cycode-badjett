@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useUser } from "../context/UserContext";
 import AddExpensesModal from "../modals/AddExpensesModal";
+import ReactMarkdown from "react-markdown"; // Import React Markdown
 
 const ExpensesPage = () => {
   const { token, user } = useUser();
@@ -58,7 +59,7 @@ const ExpensesPage = () => {
         setFilteredExpenses(response.data.expense || []);
       } catch (error) {
         console.error("Error fetching expenses:", error);
-        alert("Failed to fetch expenses. Please try again.");
+        // alert("Failed to fetch expenses. Please try again.");
       }
     };
 
@@ -225,7 +226,7 @@ const ExpensesPage = () => {
         <h2 className="text-lg font-bold">Spending Summary</h2>
         <p>Total Spent: ₱{totalSpent.toLocaleString()}</p>
 
-        {/* Display AI Tip with loading state */}
+        {/* Display AI Tip with loading state and Markdown */}
         <div className="mt-2">
           {expenseInsight.loading ? (
             <div className="flex items-center text-gray-500">
@@ -238,13 +239,19 @@ const ExpensesPage = () => {
             </p>
           ) : (
             <div className="flex items-start">
-              <span role="img" aria-label="bulb" className="mr-2">
+              <span
+                role="img"
+                aria-label="bulb"
+                className="mr-2 text-xl mt-0.5"
+              >
                 💡
               </span>
-              <p className="text-sm">
-                <span className="font-semibold">AI Tip:</span> "
-                {expenseInsight.tip}"
-              </p>
+              <div className="text-sm flex-1">
+                <span className="font-semibold block mb-1">AI Tip:</span>
+                <div className="prose prose-sm max-w-none text-gray-700">
+                  <ReactMarkdown>{expenseInsight.tip}</ReactMarkdown>
+                </div>
+              </div>
             </div>
           )}
         </div>
