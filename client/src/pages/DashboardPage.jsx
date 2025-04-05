@@ -10,10 +10,10 @@ const DashboardPage = (props) => {
 
   const [budgets, setBudgets] = useState([]); // State to store fetched budgets
   const [totalBudget, setTotalBudget] = useState(0); // State to store the total budget
-  const [expenses, setExpenses] = useState([]); // State to store fetched budgets
+  const [expenses, setExpenses] = useState([]); // State to store fetched expenses
   const [totalExpenses, setTotalExpenses] = useState(0); // State to store the total expenses
 
-  // Fetch budgets from the API
+  // Fetch budgets from the API - separate useEffect
   useEffect(() => {
     const fetchBudgets = async () => {
       try {
@@ -25,7 +25,7 @@ const DashboardPage = (props) => {
             },
           }
         );
-        console.log(response.data); // Log the fetched budgets
+        console.log("Budgets data:", response.data); // Log the fetched budgets
         setBudgets(response.data); // Update the budgets state with the fetched data
 
         // Calculate the total budget
@@ -40,6 +40,11 @@ const DashboardPage = (props) => {
       }
     };
 
+    fetchBudgets();
+  }, [currentUser._id, token]); // Run the effect when the user ID or token changes
+
+  // Fetch expenses from the API - separate useEffect
+  useEffect(() => {
     const fetchExpenses = async () => {
       try {
         const response = await axios.get(
@@ -50,16 +55,15 @@ const DashboardPage = (props) => {
             },
           }
         );
-        console.log(response.data); // Log the fetched budgets
+        console.log("Expenses data:", response.data); // Log the fetched expenses
         setExpenses(response.data.expense); // Update the expenses state with the fetched data
-        setTotalExpenses(response.data.month); // Update the total budget state
+        setTotalExpenses(response.data.month); // Update the total expenses state
       } catch (error) {
-        console.error("Error fetching budgets:", error);
-        alert("Failed to fetch budgets. Please try again.");
+        console.error("Error fetching expenses:", error);
+        alert("Failed to fetch expenses. Please try again.");
       }
     };
 
-    fetchBudgets();
     fetchExpenses();
   }, [currentUser._id, token]); // Run the effect when the user ID or token changes
 
@@ -162,7 +166,7 @@ const DashboardPage = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {expenses &&
+                {expenses && expenses.length > 0 ? (
                   expenses.map((expense) => (
                     <tr key={expense._id}>
                       <td className="border border-gray-300 px-4 py-2">
@@ -181,7 +185,17 @@ const DashboardPage = (props) => {
                         <button className="text-primary">Edit</button>
                       </td>
                     </tr>
-                  ))}
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="5"
+                      className="border border-gray-300 px-4 py-2 text-center"
+                    >
+                      No expenses available
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

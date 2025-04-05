@@ -50,11 +50,10 @@ const BudgetItemPage = () => {
           },
         }
       );
-      alert("Item deleted successfully!");
+
       setItems((prevItems) => prevItems.filter((item) => item._id !== itemId)); // Remove the deleted item from the list
     } catch (error) {
       console.error("Error deleting item:", error);
-      alert("Failed to delete item. Please try again.");
     }
   };
 
