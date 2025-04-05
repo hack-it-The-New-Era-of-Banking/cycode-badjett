@@ -15,8 +15,7 @@ const budgetCategoryRoute = require("./routes/Main/budgetCategoryRoute");
 const incomeRoute = require("./routes/Main/incomeRoute");
 const expenseRoute = require("./routes/Main/expenseRoute");
 const chatBot = require("./routes/Main/chatBotRoute");
-
-
+const recommenderAI = require("./routes/Main/recommenderRoute");
 
 // utility
 const aliveRoute = require("./routes/aliveRoute");
@@ -62,9 +61,7 @@ app.use("/api/budget", checkAuth, budgetCategoryRoute);
 app.use("/api/income", checkAuth, incomeRoute);
 app.use("/api/expense", checkAuth, expenseRoute);
 app.use("/api/chat", checkAuth, chatBot);
-
-
-
+app.use("/api/recommend", checkAuth, recommenderAI);
 
 // utility
 app.use("/api/alive", aliveRoute);
@@ -76,8 +73,4 @@ app.use("/api/alive", aliveRoute);
 // });
 app.use(globalErrorHandler);
 
-
-
-
 module.exports = app;
-
