@@ -102,7 +102,7 @@ const BudgetPage = () => {
                   <h3 className="text-[20px] font-semibold text-black break-words flex justify-between">
                     <span>{budget.category || "No Category"}</span>
                     <span className="text-right">
-                      ₱{budget.budget.toLocaleString()}
+                      ₱{(budget.budget || 0).toLocaleString()}
                     </span>
                   </h3>
                   <div className="relative w-full h-2 bg-gray-200 rounded-lg mt-2">
@@ -115,7 +115,7 @@ const BudgetPage = () => {
                   </div>
                   <p className="text-[16px] text-[#6147AA] font-normal break-words mt-2">
                     ₱{totalSpent.toLocaleString()} spent of ₱
-                    {budget.budget.toLocaleString()}
+                    {(budget.budget || 0).toLocaleString()}
                   </p>
                 </div>
               </div>

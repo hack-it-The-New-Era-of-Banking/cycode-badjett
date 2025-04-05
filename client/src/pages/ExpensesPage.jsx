@@ -174,9 +174,9 @@ const ExpensesPage = () => {
   );
 
   return (
-    <div className="md:ml-64 min-h-screen">
+    <div className="md:ml-64 min-h-screen p-4 sm:p-6">
       {/* Spending Summary Card */}
-      <div className="bg-gray-100 p-4 rounded-[10px] border-2 border-[#6147AA] shadow-md mb-6">
+      <div className="bg-gray-100 p-4 sm:p-6 rounded-[10px] border-2 border-[#6147AA] shadow-md mb-6 sm:mb-8">
         <h2 className="text-lg font-bold">Spending Summary</h2>
         <p>Total Spent: ₱{totalSpent.toLocaleString()}</p>
         <p>
@@ -186,15 +186,15 @@ const ExpensesPage = () => {
       </div>
 
       {/* Filters */}
-      <div className="flex gap-4 mb-4 overflow-x-auto">
+      <div className="flex flex-wrap gap-4 mb-4">
         <input
           type="date"
-          className="border-2 border-[#6147AA] rounded-[10px] px-4 py-2"
+          className="border-2 border-[#6147AA] rounded-[10px] px-4 py-2 flex-grow min-w-[150px]"
           value={filters.date}
           onChange={(e) => setFilters({ ...filters, date: e.target.value })}
         />
         <select
-          className="border-2 border-[#6147AA] rounded-[10px] px-4 py-2"
+          className="border-2 border-[#6147AA] rounded-[10px] px-4 py-2 flex-grow min-w-[150px]"
           value={filters.category}
           onChange={(e) => setFilters({ ...filters, category: e.target.value })}
         >
@@ -208,18 +208,18 @@ const ExpensesPage = () => {
         <input
           type="text"
           placeholder="Filter by Merchant/Description"
-          className="border-2 border-[#6147AA] rounded-[10px] px-4 py-2"
+          className="border-2 border-[#6147AA] rounded-[10px] px-4 py-2 flex-grow min-w-[200px]"
           value={filters.merchant}
           onChange={(e) => setFilters({ ...filters, merchant: e.target.value })}
         />
         <button
-          className="bg-[#6147AA] text-white px-4 py-2 rounded-[10px]"
+          className="bg-[#6147AA] text-white px-4 py-2 rounded-[10px] flex-grow-0 min-w-[120px]"
           onClick={applyFilters}
         >
           Apply Filters
         </button>
         <button
-          className="bg-gray-300 text-gray-700 px-4 py-2 rounded-[10px]"
+          className="bg-gray-300 text-gray-700 px-4 py-2 rounded-[10px] flex-grow-0 min-w-[120px]"
           onClick={() => {
             setFilters({ date: "", category: "", merchant: "" });
             setFilteredExpenses(expenses);
@@ -228,7 +228,7 @@ const ExpensesPage = () => {
           Clear Filters
         </button>
         <button
-          className="bg-[#6147AA] text-white px-4 py-2 rounded-[10px]"
+          className="bg-[#6147AA] text-white px-4 py-2 rounded-[10px] flex-grow-0 min-w-[120px]"
           onClick={openModal}
         >
           Add New Expense

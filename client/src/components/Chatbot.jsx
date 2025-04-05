@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useUser } from "../context/UserContext"; // Import the user context
 import axios from "axios"; // Import axios for API requests
+import WingmanLogo from "../assets/icons/Wingman-logo.png"; // Import the Wingman logo
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false); // State to toggle chatbot visibility
@@ -66,18 +67,22 @@ const Chatbot = () => {
   }, [isOpen]);
 
   return (
-    <div className="z-60">
+    <div className="z-[9999]">
       {/* Chatbot Toggle Button */}
       <button
         onClick={toggleChatbot}
-        className="fixed bottom-4 right-4 bg-primary text-white p-4 rounded-full shadow-lg hover:bg-primary-dark"
+        className="fixed bottom-4 right-4 w-18 h-18 rounded-full hover:opacity-90 z-[9999] flex items-center justify-center p-0"
       >
-        💬
+        <img
+          src={WingmanLogo}
+          alt="Wingman Logo"
+          className="w-full h-full object-cover"
+        />
       </button>
 
       {/* Chatbot Popup */}
       {isOpen && (
-        <div className="fixed bottom-20 right-4 w-80 bg-white border border-gray-300 rounded-lg shadow-lg">
+        <div className="fixed bottom-20 right-4 w-80 bg-white border border-gray-300 rounded-lg shadow-lg z-[9999]">
           {/* Chatbot Header */}
           <div className="bg-primary text-white p-2 rounded-t-lg flex justify-between items-center">
             <h3 className="text-lg font-semibold">Chatbot</h3>
