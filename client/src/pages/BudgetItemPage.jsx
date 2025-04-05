@@ -46,12 +46,11 @@ const BudgetItemPage = () => {
         `${import.meta.env.VITE_URL}/budget/item?id=${itemId}`,
         {
           headers: {
-            Authorization: `${token}`, // Add the token to the Authorization header
+            Authorization: `${token}`, // Use the correct token format
           },
         }
       );
-
-      setItems((prevItems) => prevItems.filter((item) => item._id !== itemId)); // Remove the deleted item from the list
+      setSubcategories((prev) => prev.filter((item) => item._id !== itemId)); // Ensure correct key is used
     } catch (error) {
       console.error("Error deleting item:", error);
     }
