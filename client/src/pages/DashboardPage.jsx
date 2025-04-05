@@ -5,15 +5,74 @@ import BalanceLineChart from "../components/dashboard/BalanceLineChart";
 import axios from "axios";
 
 const DashboardPage = () => {
-  const { user } = useUser();
+  const { user, token } = useUser();
   const currentUser = user.user;
 
-  const [showInterestsModal, setShowInterestsModal] = useState(true); // Show modal initially
+  // Check localStorage for previously selected interests
+  const [showInterestsModal, setShowInterestsModal] = useState(false);
   const [selectedInterests, setSelectedInterests] = useState([]);
   const [budgets, setBudgets] = useState([]);
   const [totalBudget, setTotalBudget] = useState(0);
   const [expenses, setExpenses] = useState([]);
   const [totalExpenses, setTotalExpenses] = useState(0);
+  const [insightData, setInsightData] = useState({
+    message: "Loading financial insights...",
+    loading: true,
+    error: null,
+  });
+
+  // Check if user has already selected interests when component mounts
+  useEffect(() => {
+    const storedInterests = localStorage.getItem(
+      `interests_${currentUser._id}`
+    );
+    if (storedInterests) {
+      // User has already selected interests
+      setSelectedInterests(JSON.parse(storedInterests));
+    } else {
+      // User hasn't selected interests yet, show the modal
+      setShowInterestsModal(true);
+    }
+  }, [currentUser._id]);
+
+  // Fetch insights from the server
+  useEffect(() => {
+    const fetchExpenseInsights = async () => {
+      try {
+        setInsightData((prev) => ({ ...prev, loading: true, error: null }));
+
+        // Make POST request to /insight/expense with empty body
+        const response = await axios.post(
+          `${import.meta.env.VITE_URL}/insight`,
+          {}, // Empty body
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
+          }
+        );
+        console.log("Expense insights response:", response.data.reply);
+        // Update state with the response data
+        setInsightData({
+          tip:
+            response.data.reply ||
+            "You could save money by reviewing your spending patterns.",
+          loading: false,
+          error: null,
+        });
+      } catch (error) {
+        console.error("Error fetching expense insights:", error);
+        setInsightData({
+          tip: "Unable to load expense insights at this time.",
+          loading: false,
+          error: error.message || "An error occurred",
+        });
+      }
+    };
+
+    // Call the function when component mounts
+    fetchExpenseInsights();
+  }, [token]); // Only depends on token
 
   const interests = [
     { id: 1, name: "Sports", icon: "⚽" },
@@ -32,17 +91,44 @@ const DashboardPage = () => {
 
   const toggleInterest = (id) => {
     setSelectedInterests((prev) =>
-      prev.includes(id) ? prev.filter((interest) => interest !== id) : [...prev, id]
+      prev.includes(id)
+        ? prev.filter((interest) => interest !== id)
+        : [...prev, id]
     );
   };
 
   const handleInterestsSubmit = () => {
     console.log("Selected Interests:", selectedInterests);
+
+    // Save interests to localStorage with user ID as part of the key
+    localStorage.setItem(
+      `interests_${currentUser._id}`,
+      JSON.stringify(selectedInterests)
+    );
+
+    // Optional: Save interests to backend
+    // saveInterestsToBackend(selectedInterests);
+
     setShowInterestsModal(false); // Close the modal after submission
   };
 
   const handleInterestsClose = () => {
-    setShowInterestsModal(false); // Close the modal without submission
+    // If user cancels without selecting, set at least one default interest
+    if (selectedInterests.length === 0) {
+      const defaultInterests = [1]; // Default to "Sports"
+      setSelectedInterests(defaultInterests);
+      localStorage.setItem(
+        `interests_${currentUser._id}`,
+        JSON.stringify(defaultInterests)
+      );
+    } else {
+      // Save whatever they had selected
+      localStorage.setItem(
+        `interests_${currentUser._id}`,
+        JSON.stringify(selectedInterests)
+      );
+    }
+    setShowInterestsModal(false);
   };
 
   useEffect(() => {
@@ -52,12 +138,15 @@ const DashboardPage = () => {
           `${import.meta.env.VITE_URL}/budget?userId=${currentUser._id}`,
           {
             headers: {
-              Authorization: `${user.token}`,
+              Authorization: `${token}`,
             },
           }
         );
         setBudgets(response.data);
-        const total = response.data.reduce((sum, budget) => sum + (budget.budget || 0), 0);
+        const total = response.data.reduce(
+          (sum, budget) => sum + (budget.budget || 0),
+          0
+        );
         setTotalBudget(total);
       } catch (error) {
         console.error("Error fetching budgets:", error);
@@ -65,7 +154,7 @@ const DashboardPage = () => {
     };
 
     fetchBudgets();
-  }, [currentUser._id, user.token]);
+  }, [currentUser._id, token]);
 
   useEffect(() => {
     const fetchExpenses = async () => {
@@ -74,19 +163,19 @@ const DashboardPage = () => {
           `${import.meta.env.VITE_URL}/expense?userId=${currentUser._id}`,
           {
             headers: {
-              Authorization: `${user.token}`,
+              Authorization: `${token}`,
             },
           }
         );
-        setExpenses(response.data.expense);
-        setTotalExpenses(response.data.month);
+        setExpenses(response.data.expense || []);
+        setTotalExpenses(response.data.month || 0);
       } catch (error) {
         console.error("Error fetching expenses:", error);
       }
     };
 
     fetchExpenses();
-  }, [currentUser._id, user.token]);
+  }, [currentUser._id, token]);
 
   return (
     <>
@@ -94,7 +183,9 @@ const DashboardPage = () => {
         <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white w-full max-w-md sm:max-w-lg lg:max-w-xl border-2 border-[#6147AA] rounded-xl shadow-lg mx-4 max-h-[90vh] overflow-hidden">
             <div className="p-6 overflow-y-auto max-h-[80vh]">
-              <h2 className="text-lg font-bold mb-4 text-[#6147AA]">Select Your Interests</h2>
+              <h2 className="text-lg font-bold mb-4 text-[#6147AA]">
+                Select Your Interests
+              </h2>
               <p className="text-sm text-gray-600 mb-4">
                 Choose your interests to personalize your experience.
               </p>
@@ -112,7 +203,9 @@ const DashboardPage = () => {
                     }`}
                   >
                     <span className="text-3xl mb-2">{interest.icon}</span>
-                    <p className="text-sm font-semibold text-gray-700">{interest.name}</p>
+                    <p className="text-sm font-semibold text-gray-700">
+                      {interest.name}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -137,26 +230,85 @@ const DashboardPage = () => {
         </div>
       )}
 
-      <div className="md:ml-64 relative z-10">
+      <div className="md:ml-64 relative z-10 p-4 sm:p-6">
         {/* Dashboard Greetings */}
         <div className="mb-4">
-          <h1 className="">Hi, {currentUser.firstName}</h1>
-          <p>Here's what's happening to your finances👋</p>
+          <h1 className="text-xl font-bold text-gray-800">
+            Hi, {currentUser.firstName}
+          </h1>
+          <p className="text-gray-600">
+            Here's what's happening to your finances 👋
+          </p>
         </div>
 
         {/* Dashboard AI Insight */}
-        <div className="h-40 border-2 mb-4 border-primary rounded-lg"></div>
+        <div className="bg-white border-2 mb-6 border-[#6147AA] rounded-lg p-4 shadow-md transition-all duration-300">
+          {insightData.loading ? (
+            <div className="flex items-center justify-center h-32">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#6147AA]"></div>
+            </div>
+          ) : insightData.error ? (
+            <div className="text-red-500 p-4">
+              <p className="font-semibold">Error loading insights</p>
+              <p className="text-sm">{insightData.error}</p>
+              <button
+                className="mt-2 bg-[#6147AA] text-white px-3 py-1 rounded-lg text-sm"
+                onClick={() => {
+                  setInsightData((prev) => ({
+                    ...prev,
+                    loading: true,
+                    error: null,
+                  }));
+                  // Retry fetching insights
+                  fetchInsights();
+                }}
+              >
+                Retry
+              </button>
+            </div>
+          ) : (
+            <div className="p-2">
+              <div className="flex items-start mb-3">
+                <div className="w-10 h-10 bg-[#F3E8FF] rounded-full flex items-center justify-center mr-3">
+                  <span role="img" aria-label="bulb" className="text-xl">
+                    💡
+                  </span>
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-800">
+                    AI Financial Insight
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    Based on your spending patterns and interests
+                  </p>
+                </div>
+              </div>
+              <p className="text-gray-700 whitespace-pre-line">
+                {insightData.tip}
+              </p>
+            </div>
+          )}
+        </div>
 
         {/* Dashboard Summary */}
-        <div className="flex gap-4">
-          <div className="dashboard-summary">
-            <p className="title">Total Budget: $10k</p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+          <div className="bg-white p-4 border-2 border-[#6147AA] rounded-lg shadow-sm">
+            <p className="text-gray-500 text-sm">Total Budget</p>
+            <p className="text-xl font-bold">₱{totalBudget.toLocaleString()}</p>
           </div>
-          <div className="dashboard-summary">
-            <p className="title">Total Expenses: $10k</p>
+
+          <div className="bg-white p-4 border-2 border-[#6147AA] rounded-lg shadow-sm">
+            <p className="text-gray-500 text-sm">Total Expenses</p>
+            <p className="text-xl font-bold">
+              ₱{totalExpenses.toLocaleString()}
+            </p>
           </div>
-          <div className="dashboard-summary">
-            <p className="title">Total Savings: $10k</p>
+
+          <div className="bg-white p-4 border-2 border-[#6147AA] rounded-lg shadow-sm">
+            <p className="text-gray-500 text-sm">Balance</p>
+            <p className="text-xl font-bold">
+              ₱{(totalBudget - totalExpenses).toLocaleString()}
+            </p>
           </div>
         </div>
 

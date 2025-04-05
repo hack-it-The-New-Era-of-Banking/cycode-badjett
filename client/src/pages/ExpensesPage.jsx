@@ -24,6 +24,12 @@ const ExpensesPage = () => {
     date: new Date().toISOString().split("T")[0],
     userId: currentUser._id,
   });
+  // New state for expense insights
+  const [expenseInsight, setExpenseInsight] = useState({
+    tip: "Loading personalized expense insights...",
+    loading: true,
+    error: null,
+  });
 
   // Payment method options
   const paymentMethods = [
@@ -79,6 +85,45 @@ const ExpensesPage = () => {
 
     fetchBudgetCategories();
   }, [currentUser._id, token]);
+
+  // Fetch expense insights
+  useEffect(() => {
+    const fetchExpenseInsights = async () => {
+      try {
+        setExpenseInsight((prev) => ({ ...prev, loading: true, error: null }));
+
+        // Make POST request to /insight/expense with empty body
+        const response = await axios.post(
+          `${import.meta.env.VITE_URL}/insight/expense`,
+          {}, // Empty body
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
+          }
+        );
+        console.log("Expense insights response:", response.data.reply);
+        // Update state with the response data
+        setExpenseInsight({
+          tip:
+            response.data.reply ||
+            "You could save money by reviewing your spending patterns.",
+          loading: false,
+          error: null,
+        });
+      } catch (error) {
+        console.error("Error fetching expense insights:", error);
+        setExpenseInsight({
+          tip: "Unable to load expense insights at this time.",
+          loading: false,
+          error: error.message || "An error occurred",
+        });
+      }
+    };
+
+    // Call the function when component mounts
+    fetchExpenseInsights();
+  }, [token]); // Only depends on token
 
   const applyFilters = () => {
     let filtered = expenses;
@@ -175,14 +220,34 @@ const ExpensesPage = () => {
 
   return (
     <div className="md:ml-64 min-h-screen p-4 sm:p-6">
-      {/* Spending Summary Card */}
+      {/* Spending Summary Card with AI Tip */}
       <div className="bg-gray-100 p-4 sm:p-6 rounded-[10px] border-2 border-[#6147AA] shadow-md mb-6 sm:mb-8">
         <h2 className="text-lg font-bold">Spending Summary</h2>
         <p>Total Spent: ₱{totalSpent.toLocaleString()}</p>
-        <p>
-          AI Tip: "You could save ₱500 this week by reducing dining out
-          expenses."
-        </p>
+
+        {/* Display AI Tip with loading state */}
+        <div className="mt-2">
+          {expenseInsight.loading ? (
+            <div className="flex items-center text-gray-500">
+              <div className="animate-spin h-4 w-4 mr-2 border-t-2 border-[#6147AA] rounded-full"></div>
+              <p>Loading AI insights...</p>
+            </div>
+          ) : expenseInsight.error ? (
+            <p className="text-red-500 text-sm">
+              Error loading AI tip: {expenseInsight.error}
+            </p>
+          ) : (
+            <div className="flex items-start">
+              <span role="img" aria-label="bulb" className="mr-2">
+                💡
+              </span>
+              <p className="text-sm">
+                <span className="font-semibold">AI Tip:</span> "
+                {expenseInsight.tip}"
+              </p>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Filters */}
