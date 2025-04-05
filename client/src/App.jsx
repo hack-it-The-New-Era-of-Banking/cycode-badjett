@@ -14,6 +14,7 @@ import IncomePage from "./pages/IncomePage";
 import InvestmentPage from "./pages/InvestmentPage";
 import NotFound from "./pages/NotFoundPage";
 import Chatbot from "./components/Chatbot";
+import SetGoalsPage from "./pages/SetGoalsPage";
 
 //components
 import Sidebar from "./components/Sidebar";
@@ -80,7 +81,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-
+        <Route
+          path="/set-goals"
+          element={
+            <ProtectedRoute>
+              <SetGoalsPage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </UserProvider>
