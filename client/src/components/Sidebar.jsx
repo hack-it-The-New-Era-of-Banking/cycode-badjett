@@ -48,7 +48,7 @@ const Sidebar = (props) => {
         </div>
 
         <div className="">
-          <h2 className="pl-2 mb-4 text-xl font-bold">Budget App</h2>
+          <h2 className="pl-2 mb-4 text-xl font-bold">Budget Wingman</h2>
           <div>
             <NavLink
               to="/"
@@ -108,7 +108,7 @@ const Sidebar = (props) => {
         className={`hidden  z-20 fixed  flex-col justify-between left-0 top-0 min-w-60 h-screen bg-secondary p-4 shadow-2xl backdrop-blur-lg md:block md:flex`}
       >
         <div className="">
-          <h2 className="pl-2 mb-4 text-xl font-bold">Budget App</h2>
+          <h2 className="pl-2 mb-4 text-xl font-bold">Budget Wingman</h2>
           <div>
             <NavLink
               to="/"
