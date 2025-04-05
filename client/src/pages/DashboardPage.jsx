@@ -2,13 +2,18 @@ import React, { useState, useEffect } from "react";
 import { useUser } from "../context/UserContext";
 import ExpensesBarChart from "../components/dashboard/ExpensesBarChart";
 import BalanceLineChart from "../components/dashboard/BalanceLineChart";
+import axios from "axios";
 
-const DashboardPage = (props) => {
+const DashboardPage = () => {
   const { user } = useUser();
   const currentUser = user.user;
 
-  const [showInterestsModal, setShowInterestsModal] = useState(true); // Show modal by default after signing up
+  const [showInterestsModal, setShowInterestsModal] = useState(false);
   const [selectedInterests, setSelectedInterests] = useState([]);
+  const [budgets, setBudgets] = useState([]);
+  const [totalBudget, setTotalBudget] = useState(0);
+  const [expenses, setExpenses] = useState([]);
+  const [totalExpenses, setTotalExpenses] = useState(0);
 
   const interests = [
     { id: 1, name: "Sports", icon: "⚽" },
@@ -33,16 +38,55 @@ const DashboardPage = (props) => {
 
   const handleInterestsSubmit = () => {
     console.log("Selected Interests:", selectedInterests);
-    setShowInterestsModal(false); // Close the modal after submission
+    setShowInterestsModal(false);
   };
 
   const handleInterestsClose = () => {
-    setShowInterestsModal(false); // Close the modal without submission
+    setShowInterestsModal(false);
   };
 
   useEffect(() => {
-    console.log(currentUser); // Log the current user object
-  }, [currentUser]);
+    const fetchBudgets = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_URL}/budget?userId=${currentUser._id}`,
+          {
+            headers: {
+              Authorization: `${user.token}`,
+            },
+          }
+        );
+        setBudgets(response.data);
+        const total = response.data.reduce((sum, budget) => sum + (budget.budget || 0), 0);
+        setTotalBudget(total);
+      } catch (error) {
+        console.error("Error fetching budgets:", error);
+      }
+    };
+
+    fetchBudgets();
+  }, [currentUser._id, user.token]);
+
+  useEffect(() => {
+    const fetchExpenses = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_URL}/expense?userId=${currentUser._id}`,
+          {
+            headers: {
+              Authorization: `${user.token}`,
+            },
+          }
+        );
+        setExpenses(response.data.expense);
+        setTotalExpenses(response.data.month);
+      } catch (error) {
+        console.error("Error fetching expenses:", error);
+      }
+    };
+
+    fetchExpenses();
+  }, [currentUser._id, user.token]);
 
   return (
     <>
@@ -168,24 +212,26 @@ const DashboardPage = (props) => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="border border-gray-300 px-4 py-2">Coffee</td>
-                  <td className="border border-gray-300 px-4 py-2">Starbucks</td>
-                  <td className="border border-gray-300 px-4 py-2">2023-03-01</td>
-                  <td className="border border-gray-300 px-4 py-2">$5.00</td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    <button className="text-primary">Edit</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 px-4 py-2">Groceries</td>
-                  <td className="border border-gray-300 px-4 py-2">Walmart</td>
-                  <td className="border border-gray-300 px-4 py-2">2023-03-02</td>
-                  <td className="border border-gray-300 px-4 py-2">$50.00</td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    <button className="text-primary">Edit</button>
-                  </td>
-                </tr>
+                {expenses &&
+                  expenses.map((expense) => (
+                    <tr key={expense._id}>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {expense.description}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {expense.merchant}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {new Date(expense.date).toLocaleDateString()}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        ₱{expense.amount.toLocaleString()}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        <button className="text-primary">Edit</button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
