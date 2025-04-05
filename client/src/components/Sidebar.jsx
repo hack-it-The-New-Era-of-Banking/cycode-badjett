@@ -150,6 +150,14 @@ const Sidebar = (props) => {
             >
               Expenses
             </NavLink>
+            <NavLink
+              to="/set-goals"
+              className={({ isActive }) =>
+                `sidebar-option ${isActive ? "sidebar-option-active" : ""}`
+              }
+            >
+              Set Goals
+            </NavLink>
           </div>
         </div>
         <div
