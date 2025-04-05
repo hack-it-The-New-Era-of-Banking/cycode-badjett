@@ -8,7 +8,7 @@ const DashboardPage = () => {
   const { user } = useUser();
   const currentUser = user.user;
 
-  const [showInterestsModal, setShowInterestsModal] = useState(false);
+  const [showInterestsModal, setShowInterestsModal] = useState(true); // Show modal initially
   const [selectedInterests, setSelectedInterests] = useState([]);
   const [budgets, setBudgets] = useState([]);
   const [totalBudget, setTotalBudget] = useState(0);
@@ -38,11 +38,11 @@ const DashboardPage = () => {
 
   const handleInterestsSubmit = () => {
     console.log("Selected Interests:", selectedInterests);
-    setShowInterestsModal(false);
+    setShowInterestsModal(false); // Close the modal after submission
   };
 
   const handleInterestsClose = () => {
-    setShowInterestsModal(false);
+    setShowInterestsModal(false); // Close the modal without submission
   };
 
   useEffect(() => {
