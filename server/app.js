@@ -16,6 +16,7 @@ const incomeRoute = require("./routes/Main/incomeRoute");
 const expenseRoute = require("./routes/Main/expenseRoute");
 const chatBot = require("./routes/Main/chatBotRoute");
 const recommenderAI = require("./routes/Main/recommenderRoute");
+const insightRoute = require("./routes/Main/insightRoute");
 
 // utility
 const aliveRoute = require("./routes/aliveRoute");
@@ -62,6 +63,7 @@ app.use("/api/income", checkAuth, incomeRoute);
 app.use("/api/expense", checkAuth, expenseRoute);
 app.use("/api/chat", checkAuth, chatBot);
 app.use("/api/recommend", checkAuth, recommenderAI);
+app.use("/api/insight", checkAuth, insightRoute);
 
 // utility
 app.use("/api/alive", aliveRoute);

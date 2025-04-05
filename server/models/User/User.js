@@ -39,7 +39,6 @@ const userSchema = new mongoose.Schema(
         "Home Decorations",
         "Sneaker Collecting",
       ],
-      required: true,
     },
     budgetCategory: [
       { type: mongoose.Schema.Types.ObjectId, ref: "BudgetCategory" },
